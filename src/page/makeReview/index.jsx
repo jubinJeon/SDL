@@ -1,0 +1,340 @@
+import axios from 'axios'
+import React, {useEffect, useState, useRef, useContext} from 'react';
+import Resizer from 'react-image-file-resizer';
+
+import Alert from '../popup/Alert'
+
+import {REDUCER_ACTION} from '../../context/SDLReducer'
+import * as ACTION from '../../common/ActionTypes'
+import {unescapehtmlcode} from '../../util/Utils'
+import {SDLContext} from '../../context/SDLStore'
+
+export default ( {history, location}) => {
+    
+    const {dispatch} = useContext(SDLContext);
+
+    useEffect(() => {
+        if(location.ordrKindCd == null) history.goBack()
+    })
+
+    // 팝업
+    const [modal, setModal] = useState({
+        showModal: false,
+        dataModal: {
+            type: "",
+            title: "",
+            desc: "",
+            handleComfirm: ''
+        }
+    })
+    const handleClickOpen = (data) => {
+        setModal({
+            showModal: true,
+            dataModal: data
+        })
+    };
+    const handleClose_modal = () => {
+        setModal({ ...modal, showModal: false });
+    };
+    
+    // 토스트
+    const toastCallback = (data) => {
+        data.dispatch({type : 'TOAST', payload : {show : false }})
+    }
+
+    const handleBackBtn = (e) => {
+        e.preventDefault();
+
+        if(textRef.current.value.length < 1)
+            history.goBack()
+        else dispatch({ type: REDUCER_ACTION.SHOW_CONFIRM,
+                payload: {data: {title: '알림', desc: '입력하신 정보가 저장되지 않습니다. 정말 다음에 작성하시겠습니까?'},
+            callback: (res) => {
+                if(res == 1) {
+                    history.goBack()
+                    dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
+                } else dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
+            }
+        }})
+        
+    }
+
+    // 화면
+    // 별점
+    const [rating, setRating] = useState(0)
+
+    const onClickStar = (e) => {
+        setRating( e.target.dataset.rate )
+    }
+    
+    const textRef = useRef()
+    const photoRef = useRef()
+
+    useEffect(() => {
+        checkAppliable()
+    }, [rating])
+
+    const [appliable, setAble] = useState(false)
+
+    const checkAppliable = () => {
+        if(textRef.current.value.length > 9 && rating > 0)
+            setAble(true)
+        else setAble(false)
+    }
+
+    const [imgSrc, setImgSrc] = useState([])
+    const [imgPreview, setPrev] = useState([])
+    const [attachable, setAttachable] = useState(true)
+
+    useEffect(() => {
+        // console.log(imgSrc)
+        
+        if( imgSrc.length > 2)
+            setAttachable(false)
+        else
+            setAttachable(true)
+    }, [imgSrc])
+
+    useEffect(() => {
+        console.log(imgPreview)
+    }, [imgPreview])
+
+    const deleteImg = (key) => {
+        setImgSrc(imgSrc.filter( img => img.id != key ))
+        setPrev(imgPreview.filter( img => img.id != key ))
+    }
+
+    const readFile = (e) => {
+        var dupl = false;
+
+        const file = e.target.files[0]
+
+        // setting for parameter image
+        if(e.target.files.length > 0 && imgSrc.length > 0) {
+            imgSrc.map((img) => {
+                if(img.id == file.name) {
+                    dupl = true
+                    return
+                }
+            })
+        }
+
+        if(!dupl) {
+
+            Resizer.imageFileResizer(
+                e.target.files[0],
+                300,
+                300,
+                'JPEG',
+                80,
+                0,
+                uri => {
+                    // console.log(uri)
+                    setImgSrc( [...imgSrc, {id: file.name, name: file.name, data: uri} ] )
+                },
+                'base64')
+            
+            // setting for preview image 
+            var reader = new FileReader()
+    
+            reader.onloadend = () => {
+                
+                    setPrev([...imgPreview, {id: file.name, file: reader.result}])
+            }
+            if(e.target.files.length > 0)
+                reader.readAsDataURL(e.target.files[0])
+        }
+
+        e.target.value = ''
+    }
+
+    async function sendReview () {
+        
+        axios.defaults.baseURL = process.env.REACT_APP_SDL_API_DOMAIN + '/api/v1'
+        
+        let config = {
+            withCredentials : true,
+            timeout: 10000,
+            headers: {
+                // 'Content-Type': 'multipart/form-data',
+                "Accept": "*/*",
+            }
+        }
+
+        axios.interceptors.request.use(function (config) {
+            const token = localStorage.getItem('accessId');
+            config.headers.Authorization =  token ? `Bearer ${token}` : ''
+            return config;
+        });
+
+        const url = 'members/reviews?'
+
+        var files = []
+        imgSrc.map((img) => {
+            files.push( JSON.stringify({'name': img.name, 'data': img.data}) )
+        })
+
+        console.log(files)
+
+        await axios.post(
+            url,
+            {
+                ordrId: location.ordrId.toString(),
+                rvwPoint: Number(rating),
+                rvwMsg: textRef.current.value.toString(),
+                files: files
+            },
+            config
+        )
+        .then((data) => {
+            // console.log(data)
+            if(data.data.code == "1") {
+                history.replace({pathname: ACTION.LINK_ORDER_HISTORY})
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            dispatch({type: 'TOAST', payload: {show : true, 
+                        data: {msg: '처리에 실패하였습니다.', code : '', dispatch : dispatch},
+                        callback : toastCallback}})
+            // console.log(err.response.data)
+            // console.log(err.response.status)
+        })
+
+
+        // const formData = new FormData()
+
+        // formData.append('ordrId', location.ordrId.toString())
+        // formData.append('rvwPoint', Number(rating))
+        // formData.append('rvwMsg', textRef.current.value.toString())
+        // imgSrc.map((img) => {
+        //     formData.append('files', JSON.stringify({'name': img.name, 'data': img.data}))
+        // })
+        
+        // await axios.post(
+        //     url,
+        //     formData,
+        //     config
+        // )
+        // .then((data) => {
+        //     // console.log(data)
+        //     if(data.data.code == "1") {
+        //         // history.replace({pathname: ACTION.LINK_ORDER_HISTORY})
+        //     }
+        // })
+        // .catch((err) => {
+        //     console.log(err)
+        //     dispatch({type: 'TOAST', payload: {show : true, 
+        //                 data: {msg: '처리에 실패하였습니다.', code : '', dispatch : dispatch},
+        //                 callback : toastCallback}})
+        //     // console.log(err.response.data)
+        //     // console.log(err.response.status)
+        // })
+
+    }
+    
+
+    return (
+        <div id="wrap">
+            {/* <Alert open={modal.showModal} data={modal.dataModal} handleClose={handleClose_modal}></Alert> */}
+            <div id="header">
+                <div className="headerTop">
+                    <div onClick={handleBackBtn} className="leftArea">
+                        <a className="icon pageClose">CLOSE</a>
+                    </div>            
+                    <div className="middleArea">
+                        <h1 className="headerTitle">리뷰쓰기</h1>
+                    </div>
+                </div>
+            </div>
+            <div id="container">
+                <div id="content">
+                    <div className="">
+                        <div className="staticTitleView">
+                            <div>
+                                <div className="statusLabel">
+                                {location.ordrKindCd.indexOf("9") != -1?
+                                    <span className="label deli">배달</span>
+                                    : <span className="label pick">픽업</span>
+                                }
+                                </div>
+                                <span className="date">{location.ordrDtm.substring(0, 10)}</span>
+                            </div>
+                            <div>
+                                <p className="title"><strong>{location.brdNm}</strong></p>
+                                <p className="option">{unescapehtmlcode(location.ordrPrdNm)}</p>
+                            </div>
+                        </div>
+                        <div className="sectionBlock"></div>
+                        <div className="reviewRegister">
+                            <div>
+                                <p className="ratingMsg"><strong>별점을 평가해 주세요.</strong></p>
+                                <div className="ratingStar big fnRating">
+                                    <span className={rating < 1 ? "star": "star on"} data-rate={1} onClick={onClickStar}></span>
+                                    <span className={rating < 2 ? "star": "star on"} data-rate={2} onClick={onClickStar}></span>
+                                    <span className={rating < 3 ? "star": "star on"} data-rate={3} onClick={onClickStar}></span>
+                                    <span className={rating < 4 ? "star": "star on"} data-rate={4} onClick={onClickStar}></span>
+                                    <span className={rating < 5 ? "star": "star on"} data-rate={5} onClick={onClickStar}></span>
+                                </div>
+                                <p className="reviewMsg">
+                                    {rating == 0 && "선택하세요"}
+                                    {rating == 1 && "1점 (별로에요)"}
+                                    {rating == 2 && "2점 (그저그래요)"}
+                                    {rating == 3 && "3점 (괜찮아요)"}
+                                    {rating == 4 && "4점 (좋아요)"}
+                                    {rating == 5 && "5점 (최고에요)"}
+                                </p>
+                                <div className="wirteArea">
+                                    <p className="title">어떤 점이 좋았나요?</p>
+
+                                    <div className="textareaBox">
+                                        <textarea /* defaultValue="내용내용내용내영앤요요냉뇬" */ ref={textRef} onChange={checkAppliable} title="리뷰 쓰기" placeholder="상품의 장,단점을 최소 10자 이상 작성해주세요."></textarea>
+                                    </div>
+                                    <div className={attachable ? "addPhotoWrap" : "addPhotoWrap disable"}>
+                                        <label className="btn icon detail addPhoto">
+                                            <input type='file' onChange={readFile}/>
+                                            <span className="label">사진첨부</span>
+                                        </label>
+                                        <ul className="phtoList" ref={photoRef}>
+                                            { imgPreview.length > 0 && 
+                                                imgPreview.map((img, i) => 
+                                                    <AttachedImg key={i} img={img} deleteImg={deleteImg} index={i}/>
+                                                )
+                                             }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="btnWrap typeFlex">
+                                <ul className="btnArea">
+                                    <li><a onClick={handleBackBtn} className="btn register default"><strong>취소</strong></a></li>
+                                    <li>
+                                        {appliable ? <a onClick={sendReview} className={ "btn login apply" }><strong>등록</strong></a>
+                                        : <a className={ "btn login apply disable"}><strong>등록</strong></a> }
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const AttachedImg = ({img, deleteImg, index}) => {
+
+    return (
+        <li>
+            <img src={img.file} alt="" />
+            <button type="button" className="del"
+                onClick={ e => {
+                    // e.target.parentElement.setAttribute("style", "display: none")
+                    deleteImg(img.id)
+                }
+            }>삭제</button>
+        </li>
+    )
+}

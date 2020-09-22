@@ -1,0 +1,55 @@
+POST http://192.168.23.130:8080/api/v1/members/login HTTP/1.1
+content-type: application/json
+Authorization: Bearer eMVofOE0EQS3BNEfG09i2If0qwV8FxwQCeiWdqGovx8RRmvhY0oLgk582bkgYhfeeBvB/pWNlpYeQftDtg==
+
+{
+ "mbrId" : "manmanyi@naver.com",
+ "mbrPwd" : "qwer1134!@#",
+ "isKeepLogin" : 0
+}
+
+#######################
+POST http://192.168.23.130:8080/api/v1/users/anonymous HTTP/1.1
+content-type: application/json
+
+{
+ "fnlAppVer" : "11111.00",
+ "dvcOsCd" : "IO",
+ "pshTkn" : "aaabbbccc",
+ "adPushFg" : 0
+}
+
+##########################
+POST http://192.168.23.130:8080/api/v1/members HTTP/1.1
+content-type: application/json
+Authorization: bearer LcdoLLFmSFK0UIUZG09i2Ib09lh8FxwQCeiWdqGovx8RRmvhY0oLgk5027spRoyIK12GHRr4r0yutF33QlmBMPGqCvKRtxC/fMo=
+
+ {
+  "mbrId" : "test1@naver.com",
+  "mbrPwd" : "qwer123$",
+  "reMbrPwd" : "qwer123$",
+  "mbrNick" : "테스터",
+  "mbrNm" : "홍길동",
+  "cnctNo" : "01012345678",
+  "mbrCi" : "daasdadadad",
+  "mbrBrth" : "19991131",
+  "gendCd" : "M",
+  "isKeepLogin" : "0"
+ }
+
+##########################
+PATCH  http://192.168.23.130:8080/api/v1/members HTTP/1.1
+content-type: application/json
+Authorization: bearer KsE+d7U/RVW0UIUcG09i2N77q1Z8FxwQCeiWdqGovx8RRmvhY0oLgk5027snRoyIK12GHRr4r0yusb/nyC72cpbbCz/s4c6adwg=
+
+ {
+     "mbrId": "test1@naver.com"
+ }
+ 
+ #####################################
+ POST http://192.168.23.130:8080/api/v1/members/check/id HTTP/1.1
+ content-type: application/json
+
+ {
+     "mbrId": "ssss"
+ }
