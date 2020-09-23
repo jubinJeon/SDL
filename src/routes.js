@@ -185,7 +185,7 @@ const Channel = () => {
       const storeCd = res.data.storeCd
       const chnlCd = res.data.chnlId
 
-      let channelUIType = 'A'
+      let channelUIType = 'B'
 
       if (chnlScrn === 'SCR01'){
         channelUIType = 'B'

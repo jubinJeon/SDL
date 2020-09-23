@@ -90,13 +90,16 @@ const OrderHistory = ( {history} ) => {
 
 
     if (loading) return (
-        <div className="">
-            <div className="stateWrap">
-                <div className="loading">로딩중..</div>
+        <>
+            <div className="">
+                <div className="stateWrap">
+                    <div className="loading">로딩중..</div>
+                </div>
             </div>
-        </div>
+        </>
     )
-    else if (error) return (
+
+    if (error) return (
         <div className="">
             <div className="stateWrap">
                 <div className="error">에러가 발생했습니다</div>
@@ -105,18 +108,7 @@ const OrderHistory = ( {history} ) => {
     )
     return (
         <div id="wrap">
-            <div id="header">
-                <div className="headerTop">
-                    <div className="middleArea">
-                        <h1 className="headerTitle">주문내역</h1>
-                    </div>
-                    <div className="rightArea" onClick={refetch}>
-                        <a className="icon reflash">
-                            새로고침
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <Header reload = {refetch}/>
             <div id="container">
                 <div id="content">
                     <div className="fullHeight">
@@ -176,7 +168,40 @@ const OrderHistory = ( {history} ) => {
     )
 };
 
+const Header = ({reload}) => {
 
+    const {dispatch,data} = useContext(SDLContext);
+
+    const onClickBackBtn = ()=>{
+        dispatch({type:REDUCER_ACTION.HISTORY_BACK})
+    }
+
+    return(
+        <>
+            <div id="header">
+                <div className="headerTop">
+
+                    {
+                        data.channel.channelUIType !== 'A' && (
+                            <div className="leftArea">
+                                <a onClick={onClickBackBtn} className="icon pageBack">Back</a>
+                            </div>
+                        )
+                    }
+                    
+                    <div className="middleArea">
+                        <h1 className="headerTitle">주문내역</h1>
+                    </div>
+                    <div className="rightArea" onClick={reload}>
+                        <a className="icon reflash">
+                            새로고침
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 
 const SingleHistoryComponent = ( {order, dispatch, history, isMember, refetch} ) => {
     // console.log(order)

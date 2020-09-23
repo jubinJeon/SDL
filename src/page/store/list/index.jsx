@@ -286,7 +286,7 @@ const StoresSection = ({ bizCtgGrp, defaultAddress}) => {
         return <>
                     <div className="emptyWrap noneData">
                         <div className="empty">
-                            <p className="emptyMsg_1">매장 정보가 없습니다.</p>
+                            <p className="emptyMsg_1">매장목록 정보가 없습니다.</p>
                         </div>
                     </div>
                 </>

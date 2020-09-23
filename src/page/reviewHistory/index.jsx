@@ -4,6 +4,7 @@ import * as ACTION from '../../common/ActionTypes'
 import * as API from '../../Api'
 import useAsync from '../../hook/useAcync'
 import {SDLContext} from '../../context/SDLStore'
+import {REDUCER_ACTION} from '../../context/SDLReducer'
 
 import Alert from '../popup/Alert'
 import { unescapehtmlcode } from '../../util/Utils'
@@ -50,20 +51,20 @@ const htmlData = (data) => {
     return formated
 }
 
-
-
 export default ({history}) => {  
+
+    const {dispatch} = useContext(SDLContext);
 
     const handleOnClick = (e) =>{
         e.preventDefault();
-        history.goBack();
+        dispatch({type:REDUCER_ACTION.HISTORY_BACK})
     }
     
     useEffect(() => {
         msgLength()
     }, [])
     
-    const {dispatch} = useContext(SDLContext);
+    
     
     // alert
     const [modal, setModal] = useState({
@@ -114,38 +115,20 @@ export default ({history}) => {
     }, [state])
 
     
-    const imgViewer = 
-        (e, history, i, i2) => {
-            e.preventDefault()
-            console.log(fullImg)
+    const imgViewer = (e, history, i, i2) => {
+        e.preventDefault()
+        console.log(fullImg)
 
-            console.log('selected:'+ fullImg[i][i2])
-            //console.log(e.currentTarget.dataset.imgId)
-            history.push(
-                {
-                    pathname : ACTION.LINK_REVIEW_IMG,
-                    imgData : fullImg[i],
-                    idx : e.currentTarget.dataset.imgId
-                }
-            )
-        }
-
-    // const imgViewer = useCallback(
-        
-    //     (e, history, index, fullImg) => {
-    //         e.preventDefault()
-
-    //         console.log('selected:'+ fullImg[index])
-    //         //console.log(e.currentTarget.dataset.imgId)
-    //         history.push(
-    //             {
-    //                 pathname : ACTION.LINK_REVIEW_IMG,
-    //                 imgData : fullImg[index],
-    //                 idx : e.currentTarget.dataset.imgId
-    //             }
-    //         )
-
-    //     }, [fullImg])
+        console.log('selected:'+ fullImg[i][i2])
+        //console.log(e.currentTarget.dataset.imgId)
+        history.push(
+            {
+                pathname : ACTION.LINK_REVIEW_IMG,
+                imgData : fullImg[i],
+                idx : e.currentTarget.dataset.imgId
+            }
+        )
+    }
 
     useEffect(() => {
         console.log(fullImg)
@@ -206,11 +189,11 @@ export default ({history}) => {
                             <div className="contentSection">
                                 <div className="commentWrap">
                                 {data.data.map((review, i) => 
-                                    <div key={i} className={review.ordrKindCd.indexOf("9") != -1? "commentRow typeDeil":"commentRow typePick"}>
+                                    <div key={i} className={review.ordrKindCd.indexOf("9") !== -1? "commentRow typeDeil":"commentRow typePick"}>
                                         <div className="commentUser">
                                             <div className="storeName">
                                                 <div className="statusLabel">
-                                                    <span className={review.ordrKindCd.indexOf("9") != -1?
+                                                    <span className={review.ordrKindCd.indexOf("9") !== -1?
                                                         "label deli" : "label pick"}/>
                                                 </div>
                                                 <p className="name"><strong>{review.strNm}</strong>
@@ -254,7 +237,7 @@ export default ({history}) => {
                                                     {review.prdInfo.map((prd, index) => {
                                                         return (
                                                             <React.Fragment key={index}>
-                                                                {index != review.prdInfo.length -1  ?
+                                                                {index !== review.prdInfo.length -1  ?
                                                                     unescapehtmlcode(prd.prdNm+'/') : unescapehtmlcode(prd.prdNm)}
                                                             </React.Fragment>)
                                                     })}

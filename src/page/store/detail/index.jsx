@@ -349,6 +349,33 @@ export default ({ history, location }) => {
     }
   }
 
+  if(resultInfoData !== null && Object.keys(resultInfoData).length === 0) {
+    return(
+      <>
+      <div id="wrap">
+        <div id="header">
+          <div className="headerTop">
+              <div className="leftArea">
+                  <a onClick={onClickBackBtn} className="icon pageBack">Back</a>
+              </div>
+              <div className="middleArea">
+                  <h1 className="headerTitle"></h1>
+              </div>
+          </div>
+        </div>
+        <div id="container">
+          <div id="content">
+            <div className="emptyWrap noneData">
+              <div className="empty">
+                  <p className="emptyMsg_1">매장 정보가 없습니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </>
+    )
+  }
 // && Object.keys(resultInfoData).length !== 0
   if(resultInfoData !== null) {
     return (
