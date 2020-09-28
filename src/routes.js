@@ -32,6 +32,9 @@ import OrderSuccess from './page/order/inform/index'
 import OrderHistory from './page/order/history/index'
 import OrderDetail from './page/order/detail/index'
 import Receipt from './page/order/detail/receipt'
+
+import Review from './page/reviewHistory/index'
+import ReviewImg from './page/reviewHistory/imageView'
 import MakeReview from './page/makeReview/index'
 
 import Mypage from './page/mysdl/index'
@@ -41,8 +44,7 @@ import Unresister from './page/myInfo/Unregister'
 import ResetHP from './page/myInfo/ResetHP'
 
 import Setting from './page/settings/index'
-import Review from './page/reviewHistory/index'
-import ReviewImg from './page/reviewHistory/imageView'
+
 import NoticeList from './page/notice/list/index'
 import NoticeDetail from './page/notice/detail/index'
 import FAQ from './page/faq/index'
@@ -66,7 +68,7 @@ import BannerList from './page/banner/list/index'
 import BannerDetail from './page/banner/detail/index'
 
 import Introduce from './components/Introduce'
-import QRCODE from './qrCode'
+import Applink from './AppLink'
 
 import Error404 from './components/Error404.jsx';
 
@@ -82,7 +84,7 @@ export default ({location,history}) => {
     <>
       <Switch location={location}>
           
-            <Route exact path = '/qrcode' component={QRCODE} />
+            <Route exact path = {ACTION.LINK_APP_LINK} component={Applink} />
             <PrivateRoute exact path={ACTION.LINK_SDL_DEFAULT}  />
             <SDLRoute exact path={ACTION.LINK_HOME} component={Home} />
             <SDLRoute exact path={ACTION.LINK_INTRO} component={Introduce}/>  
@@ -237,11 +239,12 @@ function PrivateRoute({...rest }) {
   console.log(location)
   const param = getQueryStringParams(location.search)
 
-  if ('qrcode' in param){
+  // applink 경로가 생기면 아래 분기문은 삭제해도됨
+  if ('applink' in param){
 
     return (
       <Route {...rest} 
-        render={() => <Redirect to={{ pathname: ACTION.LINK_QRCODE, search : location.search}} />}
+        render={() => <Redirect to={{ pathname: ACTION.LINK_APP_LINK, search : location.search}} />}
       />
     )
   }

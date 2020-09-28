@@ -10,20 +10,6 @@ export default ({history}) => {
 
     const {data,dispatch} = useContext(SDLContext)
 
-    var authWindow
-
-    // const handleBtnClick = ()=>{
-    //     const win = window.open("", "_black", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
-
-    //     const hiddenData1 = React.createElement('input',{type:'hidden', name : 'accessId',value : 'asdasdasd'})
-    //     const formElement = React.createElement('form',{method:'post',target:'_black',action:'http://192.168.23.97:8080/api/v1/members/check/join"'}, 
-    //     [hiddenData1, formElement]);
-    //     // formElement.submit()
-    //     formElement.dispatchEvent(new Event('submit'))
-
-    //     console.log('handleBtnClick')
-    // }
-
     const callback = useCallback((event) => {
 
         if ( event.origin.indexOf(process.env.REACT_APP_SDL_API_DOMAIN) !== -1 ) {

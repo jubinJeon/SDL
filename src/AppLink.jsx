@@ -25,11 +25,12 @@ const QRCode = () => {
 
       const domain = `${process.env.REACT_APP_DOMAIN}?strId=${search.strId}&storeCd=${search.storeCd}`
       const uri = `${process.env.REACT_APP_SCHEMA}://${domain}`
+      const appStoreUrl = `${process.env.REACT_APP_APPLE_APP_STORE_URL}`
 
-      // var visiteTm = new Date().getTime();
-      // setTimeout( function () { if ( ( new Date() ).getTime() - visiteTm < 3000 ) { // 앱스토어 이동 
-      //   window.location.href = "https://itunes.apple.com/app/id365494029"; } 
-      // } ,2500 ); 
+      var visiteTm = new Date().getTime();
+      setTimeout( function () { if ( ( new Date() ).getTime() - visiteTm < 3000 ) { // 앱스토어 이동 
+        window.location.href = appStoreUrl } 
+      } ,2500 ); 
 
       setTimeout( function () { // 앱실행 
         window.location.href = uri

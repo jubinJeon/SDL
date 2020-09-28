@@ -33,7 +33,7 @@ export const LINK_SETTING_AGR = '/mysdl/setting/agreement';
 export const LINK_REVIEW = '/mysdl/review';
 export const LINK_REVIEW_IMG = '/review/imageView';
 export const LINK_NOTICE_LIST = '/notice/list';
-export const LINK_NOTICE_DETAIL = "/notice/detail/";
+export const LINK_NOTICE_DETAIL = "/notice/detail";
 export const LINK_FAQ = '/mysdl/faq';
 export const LINK_CS = '/mysdl/cs';
 
@@ -61,7 +61,7 @@ export const LINK_CART = '/cart'
 export const LINK_AGREE_APP = '/agree/app';
 export const LINK_AGREE_PERMISSION = '/agree/permission'
 
-export const LINK_QRCODE = '/qrcode'
+export const LINK_APP_LINK = '/applink'
 
 
 

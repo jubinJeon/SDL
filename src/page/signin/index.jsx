@@ -113,30 +113,6 @@ export default ({history}) => {
                             </form>
                             </div>
                         </div>
-                        {/* <div className="socialLogin fixedBottom">
-                            <ul className="btnWrap">
-                                <li>
-                                    <a href="#" className="btn icon social btnNaver" onClick={
-                                        ()=>{API.logOut()}
-                                    }>네이버로 로그인</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="btn icon social btnKakao" onClick={()=>{
-                                        let ev = new CustomEvent('sdlAppBridge',{detail : {type : 200, data : 'testtest'}});
-                                        window.dispatchEvent(ev);
-                                    }}>카카오로 로그인</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="btn icon social btnGoogle" onClick={aaa}>구글로 로그인</a>
-                                </li>
-                            </ul>
-                            <p className="loginInfo">
-                                슬배생이 처음이시라면?
-                                <Link to={{pathname: ACTION.LINK_SIGNUP_AGREE}} className="goLink">
-                                    <strong>회원가입</strong>
-                                </Link>
-                            </p>
-                        </div> */}
                     </div>
                 </div>
             </div>

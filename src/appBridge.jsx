@@ -4,14 +4,14 @@ export const DISPATH_CODE = {
     CLOSE_APP : 100,
     CALL_PAYMENT : 201,
     START_PERMISSION : 101,
-    휴대폰본인인증_회원가입 : 150,
     QR_READER : 300,
     ZERO_PAY : 400,
     CALL_PHONE : 600,
     GEOFENCING : 700,
     SAVE_COOKIE : 800,
     CLEAR_COOKIE : 900,
-    GET_LOCATION : 1000
+    GET_LOCATION : 1000,
+    SHARED : 150
 }
 
 //1: 휴대폰본인인증(회원가입)
@@ -22,13 +22,6 @@ export const DISPATH_CODE = {
 //6: 소셜로그인(로그인)
 //7: pg결제
 
-export const BRIDGE_CODE = {
-    CLOSE_APP : 200,
-    휴대폰본인인증_회원가입 : 1,
-    CALL_PAYMENT : 201,
-    QR_READER : 300,
-}
-
 export const SDL_dispatchCloseApp = () => {
     if(window.appBridge){
         console.log('SDL_dispatchCloseApp')
@@ -37,13 +30,6 @@ export const SDL_dispatchCloseApp = () => {
         console.log('SDL_dispatchCloseApp')
         window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.CLOSE_APP , data : '' }))
     }
-}
-
-export const SDL_dispatchUserVerify = (data) => {
-    if(window.appBridge){
-        window.appBridge.dispatch(DISPATH_CODE.휴대폰본인인증_회원가입,'');    
-    }
-    
 }
 
 export const SDL_dispatchCallPayment = (data) => {
@@ -129,6 +115,9 @@ export const SDL_dispatchClearCookie = () => {
     }
 }
 
+/**
+ * 위티 정보 요청
+ */
 export const SDL_dispatchGetLocation = () => {
     console.log('SDL_dispatchGetLocation')
 
@@ -137,6 +126,17 @@ export const SDL_dispatchGetLocation = () => {
     }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
         console.log('SDL_dispatchGetLocation')
         window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.GET_LOCATION , data : '' }))
+    }
+}
+
+export const SDL_dispatchShared = (appLinkUrl) => {
+    console.log('SDL_dispatchShared')
+
+    if(window.appBridge){
+        window.appBridge.dispatch(DISPATH_CODE.SHARED,JSON.stringify({appLinkUrl : appLinkUrl}));
+    }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
+        console.log('SDL_dispatchGetLocation')
+        window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.SHARED , data : {appLinkUrl : appLinkUrl} }))
     }
 }
 

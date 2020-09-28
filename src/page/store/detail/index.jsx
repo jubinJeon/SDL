@@ -5,7 +5,7 @@ import * as API from '../../../Api'
 import * as ACTION from '../../../common/ActionTypes'
 import { getCartCnt, pullDefaultAddress, unescapehtmlcode, numberFormat, pullCartData, changeShowToast, 
   changeOrderType, makeParamForCreateOrder, pushShowScreen, pullShowScreen, removeCartDataAll, tmFormat } from '../../../util/Utils'
-import { SDL_dispatchCallPhone } from '../../../appBridge'
+import { SDL_dispatchCallPhone,SDL_dispatchShared } from '../../../appBridge'
 // Version >= 2.4.0
 import 'swiper/css/swiper.css';
 
@@ -265,6 +265,24 @@ export default ({ history, location }) => {
           API.storeDipdel(storeCd, location.state.strId)
         
   }
+
+  const goShared = (storeId, storeCd) => {
+
+    const appLinkUrl = `${process.env.REACT_APP_APP_LINK_URL}?applink=&strId=${storeId}&storeCd=${storeCd}`
+
+    console.log('appLinkUrl',appLinkUrl)
+    if (navigator.share) {
+      navigator.share({
+        title: '슬기로운배달생활',
+        url: appLinkUrl
+      }).then(() => {
+        console.log('Thanks for sharing!');
+      })
+      .catch(console.error);
+    } else {
+      SDL_dispatchShared(appLinkUrl)
+    }
+  }
   
   const doOrder = (sdlContextData) => {
 
@@ -417,7 +435,7 @@ export default ({ history, location }) => {
                         <h1 className="infoTitle">{unescapehtmlcode(resultInfoData.bsnInfoVo.strNm)}</h1>
                         <div className="infoShare">
                           <button type="button" className={resultInfoData.bsnInfoVo.dipStrYn === "Y" ? "btn like active" : "btn like"} onClick={toggleLiked_rest}>찜</button>
-                          {/* <button type="button" className="btn share">공유</button> */}
+                          <button type="button" className="btn share" onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>
                         </div>
                       </div>
                     </div>
@@ -489,7 +507,7 @@ export default ({ history, location }) => {
                         </div> */}
                         <div className="infoShare">
                           <button type="button" className={resultInfoData[0].dipStrYn === "Y" ? "btn like active" : "btn like"} onClick={toggleLiked}>찜</button>
-                          {/* <button type="button" className="btn share">공유</button> */}
+                          <button type="button" className="btn share"  onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>
                         </div>
                       </div>
                     </div>
