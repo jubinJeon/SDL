@@ -21,7 +21,7 @@ const MenuComponent = ({history, location}) => {
             <div id="header">
                 <div className="headerTop">
                     <div className="leftArea">
-                        <a onClick={handleOnClick} className="icon pageBack">Back</a>
+                        <button className="icon pageBack" onClick={handleOnClick}>Back</button>
                     </div>            
                     <div className="middleArea">
                         <h1 className="headerTitle">{unescapehtmlcode(location.state.strNm)}</h1>
