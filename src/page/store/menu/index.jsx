@@ -143,7 +143,7 @@ const ContentSection = () => {
                                 {
                                     resultData.data.map((mainClass) => 
                                             <li key={mainClass.prdOptGrpId}>
-                                                <p className="title">{mainClass.mainPrdNm}{mainClass.cpsrFg === "1" ? " (필수)" : null}</p>
+                                                <p className="title">{unescapehtmlcode(mainClass.mainPrdNm)}{mainClass.cpsrFg === "1" ? " (필수)" : null}</p>
                                                 <ul className="flowList">
                                                     {
                                                         mainClass.detail.map((subClass, index) => {
@@ -362,7 +362,7 @@ const compositeData = (location, valueOption, totalCount, totalPrice, resultData
             if(filter[0].prdOptGrpId === mainClass.key) {
 
                 setResult.keyId = filter[0].prdOptGrpId
-                setResult.keyNm = filter[0].mainPrdNm
+                setResult.keyNm = unescapehtmlcode(filter[0].mainPrdNm)
 
                 mainClass.value.map((subClass) => {
                     filter[0].detail.map((lastClass) => {
@@ -471,7 +471,7 @@ function checkMenu(resultData, valueOption, dispatch, history) {
             for(let indexB = 0; indexB < valueOption.length; indexB++) {
                 if(resultData[indexA].prdOptGrpId === valueOption[indexB].key) {
                     if(valueOption[indexB].value.length <= 0) {
-                        dispatch({type : REDUCER_ACTION.SHOW_TOAST, payload : {show : true , data : {msg: ' 필수 옵션을 (' + resultData[indexA].mainPrdNm +  ') 선택해주세요', code : 'linkCart', dispatch : dispatch, history : history} , callback : toastCallback}})
+                        dispatch({type : REDUCER_ACTION.SHOW_TOAST, payload : {show : true , data : {msg: ' 필수 옵션을 (' + unescapehtmlcode(resultData[indexA].mainPrdNm) +  ') 선택해주세요', code : 'linkCart', dispatch : dispatch, history : history} , callback : toastCallback}})
                         return false
                     }
                 }
