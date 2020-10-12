@@ -123,9 +123,9 @@ export default ( {location, history} ) => {
                         <div className="flowBox">
                         {order.ordrStusCd != "2000" && order.ordrStusCd != "9000" && order.ordrStusCd != "9999" ?
                             <div className={order.ordrKindCd.indexOf("9") != -1 ? "flowInner flowDeil" : 
-                                                order.bizCtgGrp == process.env.REACT_APP_REST_AREA_CODE ? 
+                                                order.storeCd === 'R' ? 
                                                     "flowInner flowCancel" : "flowInner flowPick"}>
-                                    {order.bizCtgGrp == process.env.REACT_APP_REST_AREA_CODE ?/* flowRest */
+                                    {order.storeCd === 'R' ?/* flowRest */
                                         <RestOrderStatusDiagram cd={order.ordrStusCd} waitNum={order.waitNum}/>
                                     :
                                         <ul className="flowMap">
