@@ -62,7 +62,7 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
             if(history.location.pathname === '/home'){
                 data.history.action = ''
                 if(window.appBridge){
-                    // 안드로이드인 경우만 아래 로직 실행
+                    // 안드로이드인 경우만 아래 로직 실행 2
                     dispatch({
                         type : 'MODAL', 
                         payload : {show : true , data : {type : 'CONFIRM_POP', title: '알림', desc : '앱을 종료하시겠습니까?'} , 
