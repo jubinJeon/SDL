@@ -325,7 +325,9 @@ export default function Terms_01() {
 					</tr>
 					<tr>
 						<td>o 제로페이 모바일 상품권 구매 서비스</td>
-						<td>(주)케이티</td>
+						<td>비즈플레이<br />
+							주식회사<br />
+						</td>
 						<td>o 회원<br />
 							- 이름<br />
 							- 성별<br />
