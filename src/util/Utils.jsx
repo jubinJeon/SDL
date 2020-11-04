@@ -445,7 +445,7 @@ export const makeParamForCreateOrder = (cartData, addressData) => {
 
       menu.option.map((opt)=>{
         opt.value.map((real) => {
-          foo.option.push({optPrdId : real.optPrdId}) 
+          foo.option.push({prdOptGrpId : opt.keyId, optPrdId : real.optPrdId}) 
         })
       })
       
