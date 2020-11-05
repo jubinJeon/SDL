@@ -3,6 +3,7 @@ import SDLReducer from './SDLReducer'
 
 export const SDLContext = createContext();
 
+// Reducer 초기 데이터 
 export const initState = {
   modal : {
     show : false,
@@ -24,9 +25,9 @@ export const initState = {
     enable : true
   },
   userJoinStatus : {
-    isSdlMember  : 0,
-    isCheckPayMember   : 0,
-    isZeroPayMember   : 0,
+    isSdlMember : 0,
+    isCheckPayMember : 0,
+    isZeroPayMember : 0,
   },
   orderStatus : {isDelivery : true},
   winpop : {
@@ -57,6 +58,7 @@ export const initState = {
   mainLocation : null,
 }
 
+// SDL 데이터 저장소
 const SDLStore = ({children}) => {
 
   const [data, dispatch] = useReducer(SDLReducer,initState);
@@ -69,7 +71,5 @@ const SDLStore = ({children}) => {
     </>
   )
 }
-
-
 
 export default SDLStore;

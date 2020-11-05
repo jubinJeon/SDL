@@ -7,6 +7,7 @@ import { objectOf, any, arrayOf } from 'prop-types';
 // 116: 김부장님
 // 91: 이사님
 
+//URL
 axios.defaults.baseURL = process.env.REACT_APP_SDL_API_DOMAIN + '/api/v1'
 
 let config = {
@@ -18,6 +19,7 @@ let config = {
     }
 }
 
+//REAUEST
 axios.interceptors.request.use(function (config) {
     const token = localStorage.getItem('accessId');
     config.headers.Authorization =  token ? `Bearer ${token}` : '';
@@ -25,6 +27,7 @@ axios.interceptors.request.use(function (config) {
   });
 
 
+//RESPONSE
 axios.interceptors.response.use(function (res) {
     // console.log(res)
     return res
@@ -928,7 +931,7 @@ export async function getAllRestArea() {
 }
 
 /**
- * 채널 정보 조회(지오펜싱)
+ * 채널 정보 검증 조회(지오펜싱)
  */
 export async function getChannelVaild(chnlValid) {
     const url = 'channel/valid'
@@ -978,6 +981,18 @@ export async function setGpsHistory(acqstPath,svcInfo) {
             acqstPath : acqstPath,
             svcInfo : svcInfo
         },
+        config
+    )
+    return response.data
+}
+
+/**
+ * 채널사 정보 조회 해오기
+ */
+export async function getChannelInfo() {
+    const url = 'channel/info'
+    const response = await axios.get(
+        url,
         config
     )
     return response.data

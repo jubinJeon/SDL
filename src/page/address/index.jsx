@@ -9,10 +9,18 @@ import { pullSearchAddress, pushDefaultAddress, removeSearchAddress } from '../.
 import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 
+/**
+ *******MAIN*******
+ *      주소
+ */
 export default ({history,location}) => {
 
+    /** 
+     * hook
+     */
     const {dispatch,data} = useContext(SDLContext);
 
+    // 이벤트 헨들러
     const handleOnClick = (e) =>{
         e.preventDefault();
         dispatch({type: REDUCER_ACTION.HISTORY_BACK})
@@ -71,10 +79,20 @@ export default ({history,location}) => {
     )
 }
 
+/**
+ * 컴포넌트 - 주소 찾는 큰화면 이미지 
+ * @param {*} param0 
+ */
 const ApiArea = ({history}) => {
     
+    /** 
+     * hook
+     */
     const location = useLocation()
 
+    /** 
+     * hook
+     */
     useEffect(() => {
         var element_wrap = document.getElementById('apiArea');
         var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
@@ -113,12 +131,22 @@ const ApiArea = ({history}) => {
     )
 }
 
+/**
+ * 컴포넌트 - 검색 주소
+ * @param {*} param0 
+ */
 const SearchAddress = ({history}) => {
 
+     /** 
+     * hook
+     */
     const location = useLocation()
     const [searchAddress, setSearchAddress] = useState([])
     const {dispatch,data} = useContext(SDLContext);
 
+     /** 
+     * hook
+     */
     useEffect(()=>{
         setSearchAddress(pullSearchAddress)
     }, [])

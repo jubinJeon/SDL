@@ -7,16 +7,21 @@ import { Link } from 'react-router-dom';
 import {SDL_dispatchCloseApp} from '../../appBridge'
 import * as ACTION from '../../common/ActionTypes'
 
-
+/**
+ *****MAIN*****
+ *  동의 약관
+ */
 export default ({history,location}) => {
 
+    /** 
+     * hook
+     */
     const [data, setData]  = useState({
         agreeAll : false,
         agree1 : false,
         agress2 : false,
         canGo : false
     })
-
     const {dispatch} = useContext(SDLContext)
 
     const refAgreeAll = useRef()
@@ -25,6 +30,7 @@ export default ({history,location}) => {
     
     let { from } = location.state || { from: { pathname: "/" } };
 
+    // 이벤트 헨들러 (확인 버튼)
     const btnConfirmClick = (e) => {
         
         // os=AN&version=1&token=dsfjkldjflkdj2123123213
@@ -38,10 +44,13 @@ export default ({history,location}) => {
             return;
         }
 
+        // 이용약관 동의 누룰시에 
         API.anonymous(param.version,param.os,param.token,refAgree2.current.checked ? 1 : 0)
         .then((data) => {
+            // (accessId 생성 => 암호화)
             console.log('resonseData',data.data.accessId);
             setAccessId(data.data.accessId)
+            // push(토큰 생성)
             pushPushToken(param.token)
             history.replace(from);
         })
@@ -49,6 +58,7 @@ export default ({history,location}) => {
         })
     }
 
+    // 이벤트 헨들러 (동의)
     const allAgreeChangListener = () => {
 
         if(refAgreeAll.current.checked){
@@ -58,6 +68,7 @@ export default ({history,location}) => {
         }
     }
 
+    // 이벤트 헨들러 (동의 1)
     const agree1ChangListener = () => {
 
         if(refAgree1.current.checked){
@@ -71,6 +82,7 @@ export default ({history,location}) => {
         }
     }
 
+    // 이벤트 헨들러 (동의 2)
     const agree2ChangListener = () => {
         if(refAgree2.current.checked){
             if(refAgree1.current.checked === true){
@@ -87,9 +99,8 @@ export default ({history,location}) => {
         }
     }
 
-
-
-    const handelCloseBtn = ()=>{
+    // 이벤트 헨들러 (x 버튼)
+    const handelCloseBtn = () => {
         dispatch({  type:REDUCER_ACTION.SHOW_CONFIRM, 
             payload:{   data : { title: '알림', desc : '앱을 종료하시겠습니까?'},
                         callback : (res)=>{
@@ -102,7 +113,6 @@ export default ({history,location}) => {
                      }
         })
     }
-
 
     return(
         <div id="wrap">
@@ -167,8 +177,7 @@ export default ({history,location}) => {
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>   
     )
 }
 

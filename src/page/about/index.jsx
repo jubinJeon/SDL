@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 
-
+/**
+ * 사업자 정보
+ */
 export default ({history}) => {
 
+    // 이벤트 핸들러 (뒤로)
     const handleOnClick = (e) =>{
         e.preventDefault();
         history.goBack();

@@ -4,19 +4,17 @@ import * as AppBridge from '../../appBridge'
 import { useEffect } from 'react';
 import {getOs} from '../../util/Utils'
 
-
+/**
+ *******MAIN********
+*     동의 허가
+ */
 export default ({history,location}) => {
 
     let { from } = location.state || { from: { pathname: "/" } };
 
-    const callback = (event)=>{
-
-        console.log(event)
-        setDidNoticeAppPermision();
-        history.replace(from);
-
-    }
-
+    /** 
+     * hook
+     */
     useEffect(()=>{
 
         console.log('addEventListener SDL_dispatchStartPermission')
@@ -29,10 +27,16 @@ export default ({history,location}) => {
 
     },[])
 
-    const btnConfirmClick = () => {
-        
-        AppBridge.SDL_dispatchStartPermission();
-        
+    // function
+    const callback = (event)=>{
+        console.log(event)
+        setDidNoticeAppPermision();
+        history.replace(from);
+    }
+
+    // 이벤트 핸들러
+    const btnConfirmClick = () => {      
+        AppBridge.SDL_dispatchStartPermission();       
     }
 
     return(

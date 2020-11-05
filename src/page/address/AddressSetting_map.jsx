@@ -6,30 +6,21 @@ import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import {SDL_dispatchGetLocation} from '../../appBridge'
 
+/**
+ ****** MAIN ***** 
+ *     주소세팅 
+ */
 export default ( {history, location} ) => {
 
+    /** 
+     * hook
+     */
     const {dispatch,data} = useContext(SDLContext);
-
     const [locationData, setLocationData] = useState(null);
 
-    const dispatchGetLocationCallback = (event) => {
-        console.log('dispatchGetLocationCallback', event)
-        const code = event.detail.code
-        const lat = event.detail.latitude
-        const lng = event.detail.longitude
-
-        if(code){
-            addressSearchByCoords(lat, lng,(address)=>{
-                setLocationData(address)
-            })
-        }else{
-            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setLocationData(address)
-            })
-        }
-        
-    }
-
+    /** 
+     * hook
+     */
     useEffect(()=>{
 
         window.addEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
@@ -86,19 +77,39 @@ export default ( {history, location} ) => {
         return () =>{
         window.removeEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
         }
-
     },[])
 
+    // 이벤트 헨들러
     const onClickBackBtn = (e) => {
         e.preventDefault();
 
         dispatch({type: REDUCER_ACTION.HISTORY_BACK})
     };
 
+    // 이벤트 핸들러
     const onChangeCenterListener = (data) => {
         addressSearchByCoords(data.Ha, data.Ga,(address)=>{
             setLocationData(address)
         })
+    }
+
+    // 이벤트 핸들러
+    const dispatchGetLocationCallback = (event) => {
+        console.log('dispatchGetLocationCallback', event)
+        const code = event.detail.code
+        const lat = event.detail.latitude
+        const lng = event.detail.longitude
+
+        if(code){
+            addressSearchByCoords(lat, lng,(address)=>{
+                setLocationData(address)
+            })
+        }else{
+            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                setLocationData(address)
+            })
+        }
+        
     }
 
     if(locationData === null) return <></>
@@ -124,8 +135,11 @@ export default ( {history, location} ) => {
     )
 }
 
-
-
+/**
+ * 주소 부분 컴포넌트
+ *  -> 상세주소
+ * @param {*} param0 
+ */
 const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,from})=>{
 
     // console.log('AddressSettingSection defaultAddress: ', defaultAddress)
@@ -134,26 +148,16 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
 
     const inputRef = useRef()
 
+    /** 
+     * hook
+     */
     const [coords, setCoords] = useState({lat : defaultAddress.y, lng : defaultAddress.x})
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
 
-    const handleBtnClick = () => {
-        const detailAddress = inputRef.current.value
-        const addressData = {...defaultAddress, address_detail : detailAddress}
-
-
-        pushDefaultAddress(addressData,'KAKAO_API')
-        pushSearchAddress(addressData)
-
-        if(data.channel.channelUIType === 'C'){
-            dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
-        }
-        
-
-        history.replace(from)
-    }
-
+    /** 
+     * hook
+     */
     useEffect(()=>{
 
         let latlng = new kakao.maps.LatLng();
@@ -219,6 +223,21 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         })
 
     }, [])
+
+    
+    // 이벤트 핸들러
+    const handleBtnClick = () => {
+        const detailAddress = inputRef.current.value
+        const addressData = {...defaultAddress, address_detail : detailAddress}
+
+        pushDefaultAddress(addressData,'KAKAO_API')
+        pushSearchAddress(addressData)
+
+        if(data.channel.channelUIType === 'C'){
+            dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
+        }
+        history.replace(from)
+    }
     
     return (
         <>
@@ -242,4 +261,6 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         </>
     )
 }
+
+
 
