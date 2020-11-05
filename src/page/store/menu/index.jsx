@@ -166,7 +166,7 @@ const ContentSection = () => {
                                                                     <span className="infoItem">
                                                                         <label className="checkSelect">
                                                                             <input type="checkbox"
-                                                                                onChange={(e) => {checkOption(valueOption, mainClass.prdOptGrpId, subClass.optPrdId, e.currentTarget.checked, setValueOption)}}
+                                                                                onChange={(e) => {checkOption(valueOption, mainClass.prdOptGrpId, subClass.optPrdId, e.currentTarget.checked, mainClass.chicCvrEa, history, dispatch, setValueOption)}}
                                                                                 checked={checked(mainClass.prdOptGrpId, subClass.optPrdId)}
                                                                             />
                                                                             <span className="dCheckBox">{unescapehtmlcode(subClass.optPrdNm)}</span>
@@ -414,10 +414,18 @@ function radioOption(valueOption, prdOptGrpId, optPrdId, setValueOption) {
     setValueOption([...valueOption])
 }
 
-function checkOption(valueOption, prdOptGrpId, optPrdId, checked, setValueOption) {
+function checkOption(valueOption, prdOptGrpId, optPrdId, checked, chicCvrEa, history, dispatch, setValueOption) {
     valueOption.map((op) => {
+        
         if(op.key === prdOptGrpId && checked) {
-            op.value.push(optPrdId)
+            if(op.value.length >= chicCvrEa)
+            {
+                dispatch({type : REDUCER_ACTION.SHOW_TOAST, payload : {show : true , data : {msg: '최대 옵션수량을 초과하였습니다.', code : 'linkCart', dispatch : dispatch, history : history} , callback : toastCallback}})
+            }
+            else
+            {
+                op.value.push(optPrdId)
+            }
         }
         else if(op.key === prdOptGrpId && !checked) {
             const index = op.value.indexOf(optPrdId)

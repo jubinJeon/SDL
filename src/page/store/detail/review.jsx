@@ -81,7 +81,11 @@ export default ({strId}) => {
                 fullImgData.push(imgData)
             })
             setfullImg(fullImgData)
-        } else setfullImg(fullImgData)
+        }
+        else
+        {
+//          setfullImg(fullImgData)
+        }
     }, [state])
 
     // useEffect(() => {
