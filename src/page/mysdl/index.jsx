@@ -8,6 +8,9 @@ import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import FooterNavigation from '../../components/FooterNavgation'
 
+/**
+ * 하단 MY슬배생 컴포넌트
+ */
 const MySDL = () => {
 
     const {dispatch} = useContext(SDLContext);

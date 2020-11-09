@@ -1,61 +1,47 @@
 import {initState} from './SDLStore'
 
+// Reducer 
 const SDLReducer = (state,{type, payload}) => {
     
     switch (type) {
         case "MODAL":
             return {...state,modal : {...state.modal,...payload}}
-
+        case "TOAST":
+            return {...state,toast : {...state.toast,...payload}}
+        case "TERMS":
+            return {...state,terms : {...state.terms,...payload}}
+        case 'HISTORY':
+            return {...state,history : {...state.history,...payload}}
         case REDUCER_ACTION.SHOW_MODAL:
             return {...state, modal : {...state.modal, show : true, ...payload}}
         case REDUCER_ACTION.HIDE_MODAL:
-                return {...state, modal : {...initState.modal}}
-            
+                return {...state, modal : {...initState.modal}}         
         case REDUCER_ACTION.SHOW_CONFIRM:
             return {...state, modal : {show : true, data : {type : 'CONFIRM_POP' , ...payload.data},callback : payload.callback}}
         case REDUCER_ACTION.HIDE_CONFIRM:
             return {...state, modal : {...initState.modal}}
-
         case REDUCER_ACTION.SHOW_ALERT:
             return {...state, modal : {show : true, data : {type : 'ALERT_POP' , ...payload.data},callback : payload.callback}}
         case REDUCER_ACTION.HIDE_ALERT:
             return {...state, modal : {...initState.modal}}
-
         case REDUCER_ACTION.SHOW_DELI_TIP_POP:
             return {...state, modal : {show : true, data : {type : 'DELI_TIP_POP' , ...payload.data},callback : payload.callback}}
         case REDUCER_ACTION.HIDE_DELI_TIP_POP:
             return {...state, modal : {...initState.modal}}
-        
-
         case REDUCER_ACTION.SHOW_TOAST:
             return {...state, toast : {...state.toast,...payload}}
         case REDUCER_ACTION.HIDE_TOAST:
             return {...state, toast : {...initState.toast}}
-
-        case "TOAST":
-            return {...state,toast : {...state.toast,...payload}}
-
-        case "TERMS":
-            return {...state,terms : {...state.terms,...payload}}
-
-        case 'HISTORY':
-            return {...state,history : {...state.history,...payload}}
-
         case REDUCER_ACTION.HISTORY_BACK:
             return {...state, history : {...state.history, action : 'BACK', ...payload}}
-
         case REDUCER_ACTION.HISTORY_BACK_ENABLE:
             return {...state, history : {...initState.history, enable : true}}
-
         case REDUCER_ACTION.HISTORY_BACK_DISABLE:
             return {...state, history : {...initState.history, enable : false}}
-            
         case REDUCER_ACTION.UPDATE_ORDER_STATUS_DELIVERY:
             return {...state, orderStatus : {isDelivery : true}}
-
         case REDUCER_ACTION.UPDATE_ORDER_STATUS_PICK:
             return {...state, orderStatus : {isDelivery : false}}
-
         case REDUCER_ACTION.CLOSE_WIN_POP:
 
             console.log('CLOSE_WIN_POP',state)
@@ -65,7 +51,6 @@ const SDLReducer = (state,{type, payload}) => {
             }
 
             return {...state, winpop : {...initState.winpop}}
-
         case REDUCER_ACTION.OPEN_AUTH_WIN_POP:
 
             const authwinPop = window.open(process.env.REACT_APP_SDL_API_DOMAIN +'/api/v1/members/check/join' , '_blank', 'height=' + Screen.height + ',width=' + Screen.width );
@@ -97,10 +82,9 @@ const SDLReducer = (state,{type, payload}) => {
             return {...state, winpop : {this : checkWinPop}}
 
         case REDUCER_ACTION.ORDER_HISTORY:
-
             return {...state, recentOrderHistory: {ordrId: payload.ordrId, storeCd: payload.storeCd, bizCtgGrp: payload.bizCtgGrp}}
-
         case REDUCER_ACTION.OPEN_NICE_PG_POP:
+
             console.log('OPEN_NICE_PG_POP')
             const nicePGWinPop = window.open('','nicePgPop','height=' + Screen.height + ',width=' + Screen.width )
             console.log('nicePGWinPop',nicePGWinPop)
@@ -112,21 +96,17 @@ const SDLReducer = (state,{type, payload}) => {
             }
             doNicePG(payload.param)
             return {...state, winpop : {this : nicePGWinPop}}
+
         case REDUCER_ACTION.SAVED_DELIVERY_ADDRESS:
             return {...state, channel : {...state.channel, hasDeliveryAddress : true}}
-
         case REDUCER_ACTION.INIT_DELIVERY_ADDRESS:
             return {...state, channel : {...state.channel, hasDeliveryAddress : false}}
-
         case REDUCER_ACTION.SAVE_USER_ORDER_MENU:
             return {...state, userOrderMenu : {...state.userOrderMenu, ...payload}}
-
         case REDUCER_ACTION.INIT_USER_ORDER_MENU:
             return {...state, userOrderMenu : {...initState.userOrderMenu}}
-
         case REDUCER_ACTION.CREATE_CHANNEL_DATA:
             return {...state, channel : {...state.channel, ...payload}}
-
         case REDUCER_ACTION.OPEN_ZERO_PAY_PURCHASE:
 
             const zeroPayPurchaseWinPop = window.open('' , 'zoroPayPurchasePop', 'height=' + Screen.height + ',width=' + Screen.width );
@@ -134,18 +114,18 @@ const SDLReducer = (state,{type, payload}) => {
             return {...state, winpop : {this : zeroPayPurchaseWinPop}}
         
         case REDUCER_ACTION.SAVE_NOTIFICATION:
-
-            return {...state, notification : {status : payload.status , data : payload.data}}
-        
+            return {...state, notification : {status : payload.status , data : payload.data}} 
         case REDUCER_ACTION.INIT_NOTIFICATION:
-
-            return {...state, notification : {...initState.notification}}
-                
+            return {...state, notification : {...initState.notification}}        
+            //채널 정보 추가
+        case REDUCER_ACTION.CHANNEL_INFO_DATA:
+            return {...state, channel: {chnlId: payload.chnlId, chnlId: payload.storeCd, bizCtgGrp: payload.bizCtgGrp}}
         default:
         break;
     }
 }
 
+// function 제로패이 (html)
 const doZeroPayPurchse = (pgPayUrl) => {
     let form = null
     form = document.createElement("form");
@@ -160,6 +140,7 @@ const doZeroPayPurchse = (pgPayUrl) => {
     form.submit();
 }
 
+// function PG (html)
 const doNicePG = (param) => {
 
     let form = null
@@ -192,6 +173,7 @@ const doNicePG = (param) => {
     form.submit();
 }
 
+// function (html input hidden)
 const createInputHiddenField = (name,value) => {
     let hiddenField = document.createElement("input");
     hiddenField.setAttribute("type", "hidden");
@@ -200,6 +182,7 @@ const createInputHiddenField = (name,value) => {
     return hiddenField
 }
 
+// reducer action
 export const REDUCER_ACTION = {
     SHOW_CONFIRM : "SHOW_CONFIRM",
     HIDE_CONFIRM : "HIDE_CONFIRM",
@@ -238,6 +221,8 @@ export const REDUCER_ACTION = {
     SAVE_NOTIFICATION : 'SAVE_NOTIFICATION',
     INIT_NOTIFICATION : 'INIT_NOTIFICATION',
 
+    //채널 정보 추가
+    CHANNEL_INFO_DATA : 'CHANNEL_INFO_DATA'
 }
 
 export default SDLReducer

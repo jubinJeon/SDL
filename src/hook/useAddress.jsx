@@ -41,12 +41,12 @@ const useAddress = ({latitude,longitude,addressName,type}, deps = []) => {
         window.addEventListener('useAddress SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
     
         return () =>{
-        window.removeEventListener('useAddress SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
+            window.removeEventListener('useAddress SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
         }
     },[])
 
     useEffect(() => {
-
+        
             switch(type){
                 case 1:
                     addressSearch(setDefaultAddress)
@@ -88,7 +88,6 @@ const addressSearchByCoords = (coords, callback) => {
     });
 }
 
-
 const addressSearch = (callback) => {
 
 
@@ -122,6 +121,5 @@ const addressSearch = (callback) => {
     }
 
 }
-
 
 export default useAddress;
