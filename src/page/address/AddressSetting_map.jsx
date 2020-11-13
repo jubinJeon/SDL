@@ -88,10 +88,11 @@ export default ( {history, location} ) => {
 
     // 이벤트 핸들러
     const onChangeCenterListener = (data) => {
-        addressSearchByCoords(data.Ha, data.Ga,(address)=>{
+        addressSearchByCoords(data.getLat(), data.getLng(),(address)=>{
             setLocationData(address)
         })
     }
+
 
     // 이벤트 핸들러
     const dispatchGetLocationCallback = (event) => {

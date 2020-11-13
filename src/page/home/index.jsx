@@ -424,7 +424,7 @@ const clickedQrReader = () => {
 const NewStoreItem = ({storeData}) => {
     // console.log(storeData)
     return (
-        <div className={storeData.isOpen === "N" || storeData.isBreakTime === "Y" || storeData.isHld === "Y"?"swiper-slide disableList":"swiper-slide"}>
+        <div className={storeData.isOpen !== "N" || storeData.isBreakTime === "Y" || storeData.isHld === "Y"?"swiper-slide disableList":"swiper-slide"}>
             <Link className="" to = {{
                 pathname:ACTION.LINK_MARKET_DETAIL+`${storeData.strId}`,
                 state: {
@@ -435,7 +435,7 @@ const NewStoreItem = ({storeData}) => {
              }}>
                 <div className="productImg">
                     <Image src={storeData.imgModNm} alt={storeData.strNm} />
-                    {storeData.isOpen === "N" || storeData.isBreakTime === "Y" || storeData.isHld === "Y" ? <span className="disableLabel"><strong>준비중</strong></span>: null }
+                    {storeData.isOpen !== "N" || storeData.isBreakTime === "Y" || storeData.isHld === "Y" ? <span className="disableLabel"><strong>준비중</strong></span>: null }
                 </div>
                 <div className="productInfo">
                     <p className="label">

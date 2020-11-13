@@ -1,6 +1,7 @@
-import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import * as API from '../../Api'
 import ListComponent from '../../components/listComponent'
+import {SDLContext} from '../../context/SDLStore'
 import { getRecentSearch, setRecentSearch, removeAllRecentSearch, removeRecentSearch, pullDefaultAddress, pullShowScreen, pushShowScreen} from '../../util/Utils'
 
 const Search = ({history, location}) => {
@@ -18,6 +19,8 @@ const Search = ({history, location}) => {
     const [showButton, setShowButton] = useState(false)
 
     const screenData = pullShowScreen()
+
+    const {dispatch,data} = useContext(SDLContext);
 
     const btnSearchClick = useCallback((nFilter)=>{
         
@@ -86,9 +89,14 @@ const Search = ({history, location}) => {
         <div id="wrap" >
             <div id="header">
                 <div className="headerTop">
-                    <div className="leftArea">
-                        <a onClick={btnBackClick} className="icon pageBack">Back</a>
-                    </div>            
+                    {
+                        data.channel.channelUIType === 'A' && (
+                            <div className="leftArea">
+                                <a onClick={btnBackClick} className="icon pageBack">Back</a>
+                            </div>
+                        )
+                    }
+
                     <div className="middleArea search">
                         <div className="searchHeader">
                             <span className="textInput withDel">
@@ -134,7 +142,7 @@ const Content1 = (props) => {
         
         let checkCnt = 0
         props.searchResult.data.map((check) => {
-            if(check.isHld === "Y") checkCnt += 1
+ //           if(check.isHld === "Y") checkCnt += 1
         })
         return (
             checkCnt === props.searchResult.data.length ? emptyComponent() : 

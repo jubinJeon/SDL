@@ -17,6 +17,8 @@ export default ({history}) => {
 
     const [locationData, setLocationData] = useState(null);
 
+    const {dispatch,data} = useContext(SDLContext)
+
     const dispatchGetLocationCallback = (event) => {
         console.log('dispatchGetLocationCallback', event)
         const code = event.detail.code
@@ -114,8 +116,12 @@ export default ({history}) => {
                     <div className="listSort pageSort">
                         <div className="btnWrap leftCol">
                             <button type="button" value="store" className={state == "store" ? "active btn" : "btn"} onClick={activeClicked}>매장</button>
-                            <button type="button" value="rest" className={state == "rest" ? "active btn" : "btn"} onClick={activeClicked}>휴게소</button>
-                            <button type="button" value="menu" className={state == "menu" ? "active btn" : "btn"} onClick={activeClicked}>메뉴</button>
+                            {
+                                data.channel.channelUIType === 'A' && (
+                                <button type="button" value="rest" className={state == "rest" ? "active btn" : "btn"} onClick={activeClicked}>휴게소</button>
+                                )
+                            }
+                           <button type="button" value="menu" className={state == "menu" ? "active btn" : "btn"} onClick={activeClicked}>메뉴</button>
                         </div>                       
                     </div>
                     {state == "menu" ? <LikeMenu defaultAddress = {locationData} history={history}/>
@@ -180,7 +186,7 @@ const LikeStore = (props) => {
                     <ul className="listContent typeLikeItems">
                         {result.map((store) => 
                             <li key={store.strId} >
-                                {store && store.isHld != "Y" &&
+                                {store != "Y" &&
                                     <LazyLoad once >
                                         <DipMarketCmpnt market={store} changeCountRef={changeCountRef} restYN={props.state}/>
                                     </LazyLoad>
@@ -304,8 +310,8 @@ const LikeMenu = ({defaultAddress, history}) => {
 
 const DipMarketCmpnt = ({ market, changeCountRef, restYN }) => {
     
-    const fn = (e, isOpen, isBreakTime) => {
-        if(isOpen === "N" || isBreakTime === "Y")
+    const fn = (e, isOpen, isBreakTime, isHld) => {
+        if(isOpen === "N" || isBreakTime === "Y" || isHld === "Y")
             e.preventDefault()
     }
 
@@ -314,7 +320,7 @@ const DipMarketCmpnt = ({ market, changeCountRef, restYN }) => {
     return (
     <>
         <Link onClick={(e)=> {
-                            fn(e, market.isOpen, market.isBreakTime)
+                            fn(e, market.isOpen, market.isBreakTime, market.isHld)
                             // const data = { bizCtgGrp : process.env.REACT_APP_REST_AREA_CATEGORY_CODE }
                             // pushShowScreen(data)
                         }}
