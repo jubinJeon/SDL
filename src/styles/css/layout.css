@@ -11,7 +11,7 @@
 
 #header{position:fixed; top:0; left:0; width:100%; z-index:100; background:#fff;}
 .bgBlack{background:#000;}
-#container{padding-top:50px;}
+#container{padding-top:50px; -webkit-touch-callout: none; -webkit-user-select: none;}
 
 .listMenu.fixed{position:fixed; top:50px; left:0; width:100%; z-index:100; background:#fff;}
 .listSort{position:fixed; top:50px; left:0; width:100%; z-index:100; background:#fff;}
@@ -56,7 +56,7 @@
 
 .headerTop .rightArea{position: absolute; right:0; top:0; font-size:0;}
 
-.headerTop .searchHeader{margin:-16px 0 0 -20px;}
+.headerTop .searchHeader{margin:-16px 0 0 0;}
 .headerTop .searchHeader .textInput{width:100%; padding-right:20px;}
 .headerTop .searchHeader .textInput input{line-height:48px; border-color:#fff;}
 .headerTop .searchHeader .searchBtn{position: absolute; right:20px; top:0;}

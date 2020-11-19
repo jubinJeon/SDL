@@ -284,7 +284,7 @@ const StoresSection = ({ bizCtgGrp, defaultAddress}) => {
                                             </div> 
                                         </>
     
-    if (componentData.allResultData.length === 0){
+    if (componentData.allResultData === null || componentData.allResultData.length === 0){
         return <>
                     <div className="emptyWrap noneData">
                         <div className="empty">
@@ -293,18 +293,22 @@ const StoresSection = ({ bizCtgGrp, defaultAddress}) => {
                     </div>
                 </>
     }
+    
     return (
 
         <>
             <div className="listSort">
-                <div className="btnWrap leftCol">
-                    <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="all"
-                        className={componentData.sortFlag === "all" ? "btn active" : "btn"}>전체</button>
-                    <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="dlv"
-                        className={componentData.sortFlag === "dlv" ? "btn active" : "btn"}>배달</button>
-                    <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="pic"
-                        className={componentData.sortFlag === "pic" ? "btn active" : "btn"}>픽업</button>
-                </div>
+                {
+                    componentData !== null &&
+                    <div className="btnWrap leftCol">
+                        <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="all"
+                            className={componentData.sortFlag === "all" ? "btn active" : "btn"}>전체</button>
+                        <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="dlv"
+                            className={componentData.sortFlag === "dlv" ? "btn active" : "btn"}>배달</button>
+                        <button type="button" onClick={(e) => {setSortFlag(e.currentTarget.value)}} value="pic"
+                            className={componentData.sortFlag === "pic" ? "btn active" : "btn"}>픽업</button>
+                    </div>
+                }
             </div>
             <div className="listWrap">
                 <ul className="listContent">

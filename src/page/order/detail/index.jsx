@@ -148,7 +148,7 @@ export default ( {location, history} ) => {
                                     <p className="address">{unescapehtmlcode(order.strAddr)}</p>
                                 </div>
                                 <div className="storeContect">
-                                    <a onClick={() => SDL_dispatchCallPhone({cnctNo: order.cnctNo})} className="btn tel">전화 걸기</a>
+                                    <a href={'tel://' + order.cnctNo}>전화 걸기</a>
                                     <a className="btn location" 
                                         onClick={()=> history.push({pathname:ACTION.LINK_MARKET_DETAIL+`${order.strId}`
                                         , state: {
@@ -293,7 +293,7 @@ export default ( {location, history} ) => {
                                         <strong>배달주소</strong>
                                         </span>
                                         <span className="leftCell">
-                                            {order.dlAddr} {order.dlAddrDtl} <br />
+                                            {unescapehtmlcode(order.dlAddr)} {unescapehtmlcode(order.dlAddrDtl)} <br />
                                         </span>
                                     </li>
                                 }
@@ -311,7 +311,7 @@ export default ( {location, history} ) => {
                                                 매장에 요청해요.
                                             </span>
                                             <span className="leftCell">
-                                                {order.ordrDesc}
+                                                {unescapehtmlcode(order.ordrDesc)}
                                             </span>
                                         </li> 
                                     : null }
@@ -321,7 +321,7 @@ export default ( {location, history} ) => {
                                                 라이더에게 요청해요.
                                             </span>
                                             <span className="leftCell">
-                                                {order.dlMnDesc}
+                                                {unescapehtmlcode(order.dlMnDesc)}
                                             </span>
                                         </li> 
                                     : null }

@@ -463,7 +463,9 @@ export default ({ history, location }) => {
                             resultInfoData.bsnInfoVo.cnctNo === null || resultInfoData.bsnInfoVo.cnctNo === "" ? null :
                             <li>
                               <span className="title">전화번호</span>
-                              <span className="desc" onClick={() => SDL_dispatchCallPhone({cnctNo: resultInfoData.bsnInfoVo.cnctNo.replace(/-/g, '')})}>{resultInfoData.bsnInfoVo.cnctNo}</span>
+                              <span>
+                              <a href={'tel://' + resultInfoData.bsnInfoVo.cnctNo}>{resultInfoData.bsnInfoVo.cnctNo}</a>
+                              </span>
                             </li>
                           }
                           {

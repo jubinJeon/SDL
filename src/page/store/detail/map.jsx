@@ -24,8 +24,8 @@ export default ({history, location}) => {
             
                     var latlng = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                    setCntrLat(latlng.Ha);
-                    setCntrLon(latlng.Ga);
+                    setCntrLat(latlng.getLat());
+                    setCntrLon(latlng.getLng());
                 }
             });    
         }

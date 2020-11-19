@@ -70,7 +70,7 @@ const OderFormContainer = ( {history,location} ) => {
         // 행정동 주소
         const hAddress = location.state.data.addressData.address.region_1depth_name + ' ' + location.state.data.addressData.address.region_2depth_name
         + ' ' + location.state.data.addressData.address.region_3depth_h_name + ' ' + location.state.data.addressData.address.main_address_no
-        + ' ' + (location.state.data.addressData.address.sub_address_no !== null || location.state.data.addressData.address.sub_address_no !== ''  ? '-' + location.state.data.addressData.address.sub_address_no : '')
+        + ' ' + (location.state.data.addressData.address.sub_address_no !== null && location.state.data.addressData.address.sub_address_no !== ''  ? '-' + location.state.data.addressData.address.sub_address_no : '')
 
         // 도로명 주소
         const rAddress = location.state.data.addressData.road_address !== null ? location.state.data.addressData.road_address.address_name : '' 

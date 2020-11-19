@@ -202,7 +202,9 @@ export default ({strId, dlvYn}) =>{
                         <span className="title">전화번호</span>
                         <span className="desc">
                             {result.data.storesCnctInfoList.map((cnct, index) => 
-                                <p key={index} onClick={() => SDL_dispatchCallPhone({cnctNo: cnct.cnctNo.replace(/-/g, '')})}>{cnct.cnctNo}</p>
+                            <p>
+                            <a href={'tel://' + cnct.cnctNo}>{cnct.cnctNo}</a>
+                            </p>
                             )}
                         </span>
                     </li>
