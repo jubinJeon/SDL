@@ -6,6 +6,7 @@ import { numberFormat, pushCartData, changeShowToast, pullDefaultAddress, makePa
 import {SDLContext} from '../../../context/SDLStore'
 import {REDUCER_ACTION} from '../../../context/SDLReducer'
 
+/////////////////////////////////MAIN///////////////////////////////////
 
 const MenuComponent = ({history, location}) => {
 
@@ -35,6 +36,11 @@ const MenuComponent = ({history, location}) => {
     )
 };
 
+/////////////////////////////////MAIN///////////////////////////////////
+
+/**
+ * 1. 컴포넌트 (중간 부분)
+ */
 
 const ContentSection = () => {
 
@@ -218,6 +224,7 @@ const ContentSection = () => {
     )
 }
 
+//장바구니 이벤트 헨들러
 const linkCart = (history, location, valueOption, totalCount, dispatch, resultData, orderType) => {
 
     if(checkMenu(resultData, valueOption, dispatch, history)) {
@@ -229,6 +236,7 @@ const linkCart = (history, location, valueOption, totalCount, dispatch, resultDa
     }
 }
 
+//주문 이벤트 헨들러
 const doOrder = (history, location, valueOption, totalCount, dispatch, resultData, orderType,sdlContextData) => {
 
     if(location.state.adultPrdFg === "1") {
@@ -261,6 +269,7 @@ const doOrder = (history, location, valueOption, totalCount, dispatch, resultDat
     
         }else{
 
+            // 주문자 정보 생성
             const param = makeParamForCreateOrder(data, addressData)
             
             API.createOrder(param)
