@@ -182,11 +182,11 @@ const Header = ({reload}) => {
                 <div className="headerTop">
 
                     {
-                        data.channel.channelUIType !== 'A' && (
-                            <div className="leftArea">
-                                <a onClick={onClickBackBtn} className="icon pageBack">Back</a>
-                            </div>
-                        )
+                        //data.channel.channelUIType !== 'A' && (
+                        //    <div className="leftArea">
+                        //        <a onClick={onClickBackBtn} className="icon pageBack">Back</a>
+                        //    </div>
+                        //)
                     }
                     
                     <div className="middleArea">

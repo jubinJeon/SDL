@@ -7,18 +7,16 @@ import { decimalToMeterFormat, unescapehtmlcode, numberFormat } from '../util/Ut
 
 const SingleMarketCmpnt = ({ market, restYN }) => {
 
-    const fn = (e, isOpen, isBreakTime) => {
-        if(isOpen === "N" || isBreakTime === "Y")
+    const fn = (e, isOpen, isBreakTime, isHld) => {
+        if(isOpen === "N" || isBreakTime === "Y" || isHld === "Y")
             e.preventDefault()
     }
 
     const thumImgUrl = market.imgModNm;
 
-    if(market.isHld === "Y") return null
-
     return (
     <>
-        <Link   onClick={(e)=>{fn(e, market.isOpen, market.isBreakTime)}}
+        <Link   onClick={(e)=>{fn(e, market.isOpen, market.isBreakTime, market.isHld)}}
                 to = {{
                     pathname:ACTION.LINK_MARKET_DETAIL+`${market.strId}`,
                     state: {

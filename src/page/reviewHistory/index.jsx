@@ -51,15 +51,40 @@ const htmlData = (data) => {
     return formated
 }
 
+const Header = ({reload}) => {
+
+    const {dispatch,data} = useContext(SDLContext);
+
+    const onClickBackBtn = ()=>{
+        dispatch({type:REDUCER_ACTION.HISTORY_BACK})
+    }
+
+    return(
+        <>
+            <div id="header">
+                <div className="headerTop">
+
+                    {
+                        data.channel.channelUIType === 'A' && (
+                            <div className="leftArea">
+                                <a onClick={onClickBackBtn} className="icon pageBack">Back</a>
+                            </div>
+                        )
+                    }
+                                        
+                    <div className="middleArea">
+                        <h1 className="headerTitle">리뷰 관리</h1>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
 export default ({history}) => {  
 
     const {dispatch} = useContext(SDLContext);
 
-    const handleOnClick = (e) =>{
-        e.preventDefault();
-        dispatch({type:REDUCER_ACTION.HISTORY_BACK})
-    }
-    
     useEffect(() => {
         msgLength()
     }, [])
@@ -157,16 +182,7 @@ export default ({history}) => {
     else return (
     <div id="wrap">
         <Alert open={modal.showModal} data={modal.dataModal} handleClose={handleClose_modal}></Alert>
-        <div id="header">
-            <div className="headerTop">
-                <div className="leftArea">
-                    <a onClick={handleOnClick} className="icon pageBack">Back</a>
-                </div>
-                <div className="middleArea">
-                    <h1 className="headerTitle">리뷰 관리</h1>
-                </div>
-            </div>
-        </div>
+        <Header reload = {refetch}/>
         <div id="container">
             <div id="content">
                 <div className="">

@@ -25,6 +25,10 @@ const ListComponent = ({data}) => {
         }
     }
 
+    useEffect(()=>{
+      sortStores(componentData.sortFlag)
+    },[data])
+
     console.log('============ componentData ',componentData)
 
     return (

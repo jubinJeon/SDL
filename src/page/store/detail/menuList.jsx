@@ -7,7 +7,6 @@ import 'swiper/css/swiper.css';
 import * as ACTION from '../../../common/ActionTypes'
 import * as API from '../../../Api'
 import { numberFormat, unescapehtmlcode, pullShowScreen } from '../../../util/Utils'
-import LazyLoad from 'react-lazyload';
 
 const MenuListComponent = (props) => {
 
@@ -123,9 +122,7 @@ const RepresentativeMenu = (props) => {
                                         }}}>
                                             <div>
                                                 <div className="viewImg">
-                                                    <LazyLoad>
-                                                        <img src={thumImgUrl} alt="" onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}}/>
-                                                    </LazyLoad>
+                                                    <img src={thumImgUrl} alt="" onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}}/>
                                                 </div>
                                                 <p className="itemName">
                                                     <button onClick={toggleLiked} className={data.dipPrdYn === "Y" ? "icon like active" : "icon like"} value={data.prdId}></button>

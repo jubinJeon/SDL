@@ -217,6 +217,10 @@ const Channel = () => {
         history.replace({pathname: ACTION.LINK_ORDER_HISTORY})
       }else if(chnlScrn === 'SCR04'){ // 리뷰
         history.replace( ACTION.LINK_REVIEW)
+      }else if(chnlScrn === 'SCR05'){ // 찜
+        history.replace( ACTION.LINK_MY_JJIM)
+      }else if(chnlScrn === 'SCR06'){ // 검색
+        history.replace( ACTION.LINK_SEARCH)
       }
 
     })

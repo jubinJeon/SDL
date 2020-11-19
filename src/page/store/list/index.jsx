@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Link , useLocation} from 'react-router-dom';
-import LazyLoad from 'react-lazyload';
 import SingleMarketCmpnt from '../../../components/SingleMarketCmpnt'
 
 import * as ACTION from '../../../common/ActionTypes'
@@ -311,11 +310,9 @@ const StoresSection = ({ bizCtgGrp, defaultAddress}) => {
                 <ul className="listContent">
                     {
                         componentData !== null && getData(componentData.sortFlag).map((market)=>
-                        <LazyLoad>
-                            <li key = {market.strId}>
-                                <SingleMarketCmpnt  market={market} restYN ='N'/>
-                            </li>
-                        </LazyLoad>
+                        <li key = {market.strId}>
+                            <SingleMarketCmpnt  market={market} restYN ='N'/>
+                        </li>
                         )
                     }
                 </ul>
@@ -463,11 +460,9 @@ const RestAreaSection = ()=>{
                             <ul className="listContent">
                                 {
                                     restAreas !== null && restAreas.data.map((market)=>
-                                    <LazyLoad>
-                                        <li key = {market.strId}>
-                                            <SingleMarketCmpnt  market={market}  restYN ='Y'/>
-                                        </li>
-                                    </LazyLoad>
+                                    <li key = {market.strId}>
+                                        <SingleMarketCmpnt  market={market}  restYN ='Y'/>
+                                    </li>
                                     )
                                 }
                             </ul>
