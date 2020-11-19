@@ -97,43 +97,49 @@ const RepresentativeMenu = (props) => {
                             const thumImgUrl = data.imgModNm;
                     
                             if(data.prdSaleCd === "OS")
-                            return (
-                                <div key={data.prdId} className="swiper-slide">
-                                    <Link to = {{
-                                        pathname:ACTION.LINK_ORDER_MENU,
-                                        state: {
-                                            mainMenu : true,
-                                            strId : props.category.strId,
-                                            strNm : props.strNm,
-                                            strAddr : props.strAddr,
-                                            prdId : data.prdId,
-                                            prdNm : data.prdNm,
-                                            normalPrice : data.normalPrice,
-                                            dlMinOrdrPrc : props.dlMinOrdrPrc,
-                                            dlMinOrdrPrc9icp : props.dlMinOrdrPrc9icp,
-                                            dlMinOrdrPrc9ica : props.dlMinOrdrPrc9ica,
-                                            dlMinOrdrPrc9icm : props.dlMinOrdrPrc9icm,
-                                            imgModNm : data.imgModNm,
-                                            prdDesc : data.prdDesc,
-                                            // orderType : props.orderType,
-                                            maxSaleCnt : data.maxSaleCnt,
-                                            adultPrdFg : data.adultPrdFg,
-                                            storeCd : props.storeCd
-                                        }}}>
-                                            <div>
-                                                <div className="viewImg">
-                                                    <img src={thumImgUrl} alt="" onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}}/>
+                            {
+                                return (
+                                    <div key={data.prdId} className="swiper-slide">
+                                        <Link to = {{
+                                            pathname:ACTION.LINK_ORDER_MENU,
+                                            state: {
+                                                mainMenu : true,
+                                                strId : props.category.strId,
+                                                strNm : props.strNm,
+                                                strAddr : props.strAddr,
+                                                prdId : data.prdId,
+                                                prdNm : data.prdNm,
+                                                normalPrice : data.normalPrice,
+                                                dlMinOrdrPrc : props.dlMinOrdrPrc,
+                                                dlMinOrdrPrc9icp : props.dlMinOrdrPrc9icp,
+                                                dlMinOrdrPrc9ica : props.dlMinOrdrPrc9ica,
+                                                dlMinOrdrPrc9icm : props.dlMinOrdrPrc9icm,
+                                                imgModNm : data.imgModNm,
+                                                prdDesc : data.prdDesc,
+                                                // orderType : props.orderType,
+                                                maxSaleCnt : data.maxSaleCnt,
+                                                adultPrdFg : data.adultPrdFg,
+                                                storeCd : props.storeCd
+                                            }}}>
+                                                <div>
+                                                    <div className="viewImg">
+                                                        <img src={thumImgUrl} alt="" onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}}/>
+                                                    </div>
+                                                    <p className="itemName">
+                                                        <button onClick={toggleLiked} className={data.dipPrdYn === "Y" ? "icon like active" : "icon like"} value={data.prdId}></button>
+                                                        <span className="name">{unescapehtmlcode(data.prdNm)}</span>
+                                                        {data.adultPrdFg ? <span className="icon drinkMenu"></span> : null}
+                                                    </p>
+                                                    <p className="itemPrice"><span>{numberFormat(data.normalPrice)}원</span></p>
                                                 </div>
-                                                <p className="itemName">
-                                                    <button onClick={toggleLiked} className={data.dipPrdYn === "Y" ? "icon like active" : "icon like"} value={data.prdId}></button>
-                                                    <span className="name">{unescapehtmlcode(data.prdNm)}</span>
-                                                    {data.adultPrdFg ? <span className="icon drinkMenu"></span> : null}
-                                                </p>
-                                                <p className="itemPrice"><span>{numberFormat(data.normalPrice)}원</span></p>
-                                            </div>
-                                        </Link>
-                                </div>
-                            )
+                                            </Link>
+                                    </div>
+                                )
+                            }
+                            else
+                            {
+                                return (<></>)
+                            }
                         })
                     }
                 </Swiper>
