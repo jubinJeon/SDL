@@ -13,12 +13,15 @@ import Modal from './page/popup/Modal'
 import ToastPopUp from './page/popup/Toast';
 import TermsPopUp from './page/popup/TermsPopUp';
 import {REDUCER_ACTION} from './context/SDLReducer'
+import withClearCache from "./ClearCache";
 
+const ClearCacheComponent = withClearCache(SDLStore);
 
 function App() {
 
   return (
     <SDLStore>
+      <ClearCacheComponent />
       <SDLContainer />
       <Portal/>
     </SDLStore>

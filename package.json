@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.2",
     "classnames": "^2.2.6",
+    "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-confirm-alert": "^2.6.1",
@@ -25,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "node ./update-build.js && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -43,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "buildDate": 1605765817584
 }
