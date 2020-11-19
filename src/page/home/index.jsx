@@ -1,3 +1,6 @@
+home
+
+
 /*global kakao*/
 import React, {useRef,createRef,useState, useCallback, useEffect,useContext} from 'react';
 import Swiper from 'react-id-swiper';
@@ -17,11 +20,17 @@ import {REDUCER_ACTION} from '../../context/SDLReducer'
 import {SDL_dispatchGeofencing, SDL_dispatchGetLocation} from '../../appBridge'
 import FooterNavgation from '../../components/FooterNavgation'
 
+
+/**
+ * ***** MAIN *****
+ * @param {*} history (ROUTER)
+ */
 const MainContainer = ({history})=>{
 
     const location = useLocation()
     const [locationData, setLocationData] = useState(null);
 
+    // 주소 가지오는 함수
     const dispatchGetLocationCallback = (event) => {
         console.log('dispatchGetLocationCallback', event)
         const code = event.detail.code
@@ -42,6 +51,7 @@ const MainContainer = ({history})=>{
         
     }
 
+    // QR 가지오는 함수
     const dispatchInternalQRCallback = (event) => {
 
         const data = event.detail.data
@@ -61,9 +71,10 @@ const MainContainer = ({history})=>{
         window.addEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
         window.addEventListener('SDL_dispatchInternalQR',dispatchInternalQRCallback, false)
 
-        // 저장된 주소 가져오기
+        // 저장된 주소 가져오기 (디폴트 주소)
         const storedDefaultAddress = pullDefaultAddress()
 
+        // 디폴트 주소 없으면 
         if(storedDefaultAddress !== null && Object.keys(storedDefaultAddress).length !== 0){
 
             setLocationData(storedDefaultAddress)
@@ -112,14 +123,17 @@ const MainContainer = ({history})=>{
             }
         }
 
+        //현재 보고있는 위치 삭제 (SCREEN => 카테고리 데이터)
         removeShowScreenDataAll()
 
+        //카트 정보 삭제
         removeCartDataAll()
 
         const param = getQueryStringParams(location.state.from.search)
 
         try{
             // 푸시토크값을 업데이트를 한다.
+            // home에서는 token 업데이트
             console.log('token', param.token)
             API.upDatePushToken(param.token, param.os)
             .then((res)=>{
@@ -127,6 +141,7 @@ const MainContainer = ({history})=>{
             })
             .catch((err)=>{})
 
+            //휴게소 리스트를 미리 가지온다?
             API.getAllRestArea()
             .then((res)=>{
                 if(res){
@@ -140,13 +155,14 @@ const MainContainer = ({history})=>{
             
         }
 
+        //unMount
         return () =>{
             window.removeEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
-            window.removeEventListener('SDL_dispatchInternalQR',dispatchInternalQRCallback, false)
-            
+            window.removeEventListener('SDL_dispatchInternalQR',dispatchInternalQRCallback, false)          
         }
     },[])
     
+    // 주소없으면 빈 화면 
     if(locationData === null) return (<></>)
 
     return (
@@ -166,6 +182,9 @@ const MainContainer = ({history})=>{
     )
 }
 
+/** 
+ * 1. 헤더 컴포넌트 (주소)
+ */
 const Header = ({defaultAddress})=>{
 
     const {dispatch} = useContext(SDLContext)
@@ -183,6 +202,7 @@ const Header = ({defaultAddress})=>{
         }
     }
 
+    // 슬배생 화면 
     const toastCallback = (data) => {
         console.log('toastCallback', data)
         data.dispatch({type : 'TOAST', payload : {show : false }})
@@ -190,6 +210,7 @@ const Header = ({defaultAddress})=>{
     }
 
 
+    //제로페이 왼쪽 상단 
     const doZeroPay = (dispatch) => {
 
         API.getUserJoinStatus()
@@ -228,6 +249,22 @@ const Header = ({defaultAddress})=>{
     );
 }
 
+/** 
+ * 2. 중간 컴포넌트 (광고 부분) 
+ */
+const BannerSection = ({history})=>{
+
+    return(
+            <div className="mainBanner">
+                <SimpleSwiperWithParams history={history}/>
+            </div>
+    );
+}
+
+/** 
+ * 2. 중간 컴포넌트 (광고 부분) 
+ *  -> 광고 리스트 
+ */
 const SimpleSwiperWithParams = ({history}) => {
     const params = {
       slidesPerView: 'auto',
@@ -293,16 +330,9 @@ const SimpleSwiperWithParams = ({history}) => {
     )
   }
 
-const BannerSection = ({history})=>{
-
-    return(
-            <div className="mainBanner">
-                <SimpleSwiperWithParams history={history}/>
-            </div>
-    );
-}
-
-
+/** 
+ *  2. 중간 카테고리 ~ 제로페이 화면까지 컴포넌트 (중간)
+ */
 const CategorySection = ({history, defaultAddress})=>{
 
     const [state,refetch] = useAsync(API.getCatogories,[]);
@@ -368,6 +398,18 @@ const CategorySection = ({history, defaultAddress})=>{
     );
 }
 
+// function (푸시 스크린: 카테고리 넣어줌)
+const clickedCategory = (bizCtgGrp) => {
+    const data = {
+        bizCtgGrp : bizCtgGrp
+    }
+    pushShowScreen(data)
+}
+
+
+/** 
+ *  3. 하단 컴포넌트 ( 새로나왔어요 부분 )
+ */
 const NewStoreSection = ()=>{
 
     const params = {
@@ -410,17 +452,15 @@ const NewStoreSection = ()=>{
     );
 }
 
-const clickedCategory = (bizCtgGrp) => {
-    const data = {
-        bizCtgGrp : bizCtgGrp
-    }
-    pushShowScreen(data)
-}
-
+// function (qr)
 const clickedQrReader = () => {
     AppBridge.SDL_dispatchQrReader();
 }
 
+/** 
+ * 3. 하단 컴포넌트 ( 새로나왔어요 부분 )
+ *  -> 새로운 매장 컴포넌트 
+ */
 const NewStoreItem = ({storeData}) => {
     // console.log(storeData)
     return (
@@ -450,48 +490,9 @@ const NewStoreItem = ({storeData}) => {
     )
 }
 
-const NoticeSection = () => {
-
-    // 공지사항 조회
-    const [state, refetch] = useAsync(() => {
-        return API.getNoticeList(0, 1)
-    }, [])
-
-    const { loading, error, data } = state;
-
-    if (loading) return (
-        <div className="noticeInner"></div>
-    )
-
-    if (error) return (
-        <div className="noticeInner"></div>
-    )
-    
-    if(data === null) return null
-    
-    if(Object.keys(data).length === 0){
-        return (
-            <div className="noticeInner">    
-                <p className="noticeMsg">공지사항 데이터가 없습니다.</p>
-            </div>
-        )
-    }
-
-    return (
-        <>
-            <div className="noticeInner">    
-                <p className="noticeMsg">
-                    <Link to={{pathname: ACTION.LINK_NOTICE_DETAIL + data.data[0].brcId
-                            , data: data.data[0]}}><span className="label">
-                        공지</span>{data.data[0].boardTitle}</Link>
-                    {/* ACTION.LINK_NOTICE_DETAIL+ `${notice.brcId}` 형으로 호출. -ys*/}
-                </p>
-                
-            </div>
-        </>
-    )
-}
-
+/** 
+ *  4. 푸터 컴포넌트 (홈, 주변지도, my슬배생, 주문내역) 
+ */
 const Footer = () => {
 
     
@@ -538,7 +539,50 @@ const Footer = () => {
     
 }
 
+/** 
+ *  4. 푸터컴포넌트 (홈, 주변지도, my슬배생, 주문내역) 
+ *   -> 공지사항 컴포넌트
+ */
+const NoticeSection = () => {
 
+    // 공지사항 조회
+    const [state, refetch] = useAsync(() => {
+        return API.getNoticeList(0, 1)
+    }, [])
 
+    const { loading, error, data } = state;
+
+    if (loading) return (
+        <div className="noticeInner"></div>
+    )
+
+    if (error) return (
+        <div className="noticeInner"></div>
+    )
+    
+    if(data === null) return null
+    
+    if(Object.keys(data).length === 0){
+        return (
+            <div className="noticeInner">    
+                <p className="noticeMsg">공지사항 데이터가 없습니다.</p>
+            </div>
+        )
+    }
+
+    return (
+        <>
+            <div className="noticeInner">    
+                <p className="noticeMsg">
+                    <Link to={{pathname: ACTION.LINK_NOTICE_DETAIL + data.data[0].brcId
+                            , data: data.data[0]}}><span className="label">
+                        공지</span>{data.data[0].boardTitle}</Link>
+                    {/* ACTION.LINK_NOTICE_DETAIL+ `${notice.brcId}` 형으로 호출. -ys*/}
+                </p>
+                
+            </div>
+        </>
+    )
+}
 
 export default MainContainer;

@@ -16,107 +16,7 @@ import Info from './info';
 import {SDLContext} from '../../../context/SDLStore'
 import {REDUCER_ACTION} from '../../../context/SDLReducer'
 
-const scrollFun = () =>{
-
-  let herder = document.querySelector("#wrap.detailLayout");
-  if(herder){
-    let infoTitleTop = document.querySelector('.detailInfo .infoTitle').getBoundingClientRect().top;
-    let detailMenu = document.querySelector('.detailMenu');
-    const startScrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;    
-    const scrollStart = () =>{     
-      let menuTop = detailMenu.offsetTop; 
-      const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-      if (scrollTop > infoTitleTop && scrollTop > (startScrollTop - Math.abs(infoTitleTop))) {
-        herder.classList.add("fixedMenu")
-      }else{
-        herder.classList.remove("fixedMenu")
-      }      
-      if (scrollTop > menuTop - 47) {
-        detailMenu.classList.add('fixedMenu')
-      }else{
-        detailMenu.classList.remove('fixedMenu')
-      }
-    }
-    window.addEventListener("scroll", scrollStart);
-  }
-  
-}
-
-const moreMsg = () =>{
-  var moreBtn = document.querySelectorAll('.fnMoreBtn')
-  // var moreMenu = document.querySelectorAll('.listTitle')
-  var tabMenu = document.querySelectorAll('.detailMenu .menuTab li')
-  var tabContent = document.querySelectorAll('.detailMenu .tebContent')
-  var infoChoiceTab = document.querySelectorAll('.infoChoice .fnTabMenu li')
-  var infoChoiceCon = document.querySelectorAll('.infoChoice .tebContent')
-  
-  moreBtn.forEach((v)=>{
-    v.addEventListener("click", function(e){
-      e.preventDefault()
-      this.classList.toggle('active')
-      this.previousSibling.classList.toggle('active')
-    })
-  })
-
-  infoChoiceTab.forEach((v) =>{
-    v.addEventListener('click', function(e){
-      e.preventDefault();
-      for(let siblings of this.parentNode.children){
-        siblings.classList.remove('active')
-      }
-      for(let siblingsContent of infoChoiceCon){
-        siblingsContent.classList.remove('active')
-      }
-      var cdx = document.querySelector(this.children[0].hash)
-      this.classList.add('active')
-      cdx.classList.add('active')
-    })
-  })
-
-  tabMenu.forEach((v) =>{
-    v.addEventListener('click', function(e){
-
-      e.preventDefault();
-
-      for(let siblings of this.parentNode.children){
-        siblings.classList.remove('active')
-      }
-      
-      for(let siblingsContent of tabContent){
-        siblingsContent.classList.remove('active')
-      }
-
-      var cdx = document.querySelector(this.children[0].hash)
-      this.classList.add('active')
-      cdx.classList.add('active')
-      window.scrollTo({
-        top: cdx.offsetTop - 92
-      })
-    })
-  })
-}
-
-// copyAddress_store classname을 가진 태그의 값을 클립보드로 복사
-const copyMsg = (e) =>{
-  var copyAddress = document.querySelector(".copyAddress_store").innerText
-  var tempElem = document.createElement("textarea")
-  document.body.appendChild(tempElem)
-  tempElem.value = copyAddress;
-  tempElem.select();
-  document.execCommand("copy")
-  document.body.removeChild(tempElem)
-}
-
-const toastCallback = (data) => {
-  data.dispatch({type : REDUCER_ACTION.HIDE_TOAST})
-
-  if(data.code === -4){
-    if(data.sdlContextData.channel.channelUIType === 'C'){
-      data.dispatch({type: REDUCER_ACTION.INIT_DELIVERY_ADDRESS})
-    }
-  }
-  
-}
+////////////////////////////////////MAIN////////////////////////////////////////////
 
 export default ({ history, location }) => {
 
@@ -284,6 +184,7 @@ export default ({ history, location }) => {
     }
   }
   
+  //주문하기 이벤트
   const doOrder = (sdlContextData) => {
 
     const menuData = pullCartData();
@@ -324,6 +225,7 @@ export default ({ history, location }) => {
 
   }else{
 
+    // 주문자 정보 생성
     const param = makeParamForCreateOrder(menuData, addressData)
       API.createOrder(param)
       .then((res)=>{
@@ -400,6 +302,7 @@ export default ({ history, location }) => {
       <>
         <div id="wrap" className="detailLayout">
           
+          {/* 1.  헤더 컴포넌트 */}
           <div id="header">
             <div className="headerTop">
               <div className="leftArea">
@@ -415,14 +318,19 @@ export default ({ history, location }) => {
               </div>
             </div>
           </div>
+          {/* 헤더 컴포넌트 */}
+
+
+          {/* 중간 컴포넌트 */}
           <div id="container">
             <div id="content">
               <div>
-
                 {
                   location.state.storeCd === "R"
                   ?
                   <>
+                   {/* 2. 이미지, 찜, 공유, 위치안내, 결제방법 컴포넌트 */}
+                   {/* 휴게소 컴포넌트 */}
                   <div className="detailView">
                     <div className="imgView">
                       <img src={thumImgUrl} onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}} />
@@ -440,6 +348,7 @@ export default ({ history, location }) => {
                       </div>
                     </div>
                   </div>
+
                   <div className="detailDesc">
                     <div className="infoChoice">
                       <div className="tebContent active">
@@ -477,9 +386,13 @@ export default ({ history, location }) => {
                       </div>
                     </div>
                   </div>
+                   {/* 2. 이미지, 찜, 공유, 위치안내, 결제방법 컴포넌트 */}
+                   {/* 휴게소 컴포넌트 */}
                   </>
                   :
                   <>
+                   {/* 2. 이미지, 찜, 공유, 위치안내, 결제방법 컴포넌트 */}
+                   {/* 일반매장 컴포넌트 */}
                   <div className="detailView">
                     <div className="imgView">
                       <img src={thumImgUrl} onError={(e)=>{e.target.onerror = null; e.target.src="/common/images/no_image.png"}}/>
@@ -654,10 +567,16 @@ export default ({ history, location }) => {
                       </div>
                     }
                   </div>
+                  {/* 2. 이미지, 찜, 공유, 위치안내, 결제방법 컴포넌트 */}
+                  {/* 일반매장 컴포넌트 */}
                   </>
                 }
                 
+                {/* 3. 회색 부분 */}
                 <div className="sectionBlock"></div>
+                {/* 3. 회색 부분 */}
+
+                {/* 4. 메뉴, 정보, 리뷰 컴포넌트 */}
                 <div className="detailMenu">
                   {
                     location.state.storeCd === "R" ?
@@ -705,6 +624,9 @@ export default ({ history, location }) => {
                     </>
                   }
                 </div>
+                {/* 4. 메뉴, 정보, 리뷰 컴포넌트 */}
+
+                {/* 5. 배달, 픽업 (선택) 컴포넌트 (하단) */}
                 <div>
                   {
                     location.state.storeCd === "R" ? null : 
@@ -724,6 +646,8 @@ export default ({ history, location }) => {
                     null
                   }
                 </div>
+
+                {/* 6.  컴포넌트 (하단) */}
                 {
                   data.channel.channelUIType === 'A' && totalCount !== 0 && totalCount !== undefined ? 
                   <div className="fixedBtn flex3half1">
@@ -733,7 +657,11 @@ export default ({ history, location }) => {
                   :
                   null
                 }
+                {/* 6.  컴포넌트 (하단) */}
+
               </div>
+              {/* 중간 컴포넌트 */}
+
             </div>
           </div>
         </div>
@@ -745,25 +673,135 @@ export default ({ history, location }) => {
 
 };
 
+////////////////////////////////////MAIN////////////////////////////////////////////
 
+///////////////////////////////////funcion//////////////////////////////////////////
 
+// function (scroll 함수)
+const scrollFun = () =>{
+
+  let herder = document.querySelector("#wrap.detailLayout");
+  if(herder){
+    let infoTitleTop = document.querySelector('.detailInfo .infoTitle').getBoundingClientRect().top;
+    let detailMenu = document.querySelector('.detailMenu');
+    const startScrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;    
+    const scrollStart = () =>{     
+      let menuTop = detailMenu.offsetTop; 
+      const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+      if (scrollTop > infoTitleTop && scrollTop > (startScrollTop - Math.abs(infoTitleTop))) {
+        herder.classList.add("fixedMenu")
+      }else{
+        herder.classList.remove("fixedMenu")
+      }      
+      if (scrollTop > menuTop - 47) {
+        detailMenu.classList.add('fixedMenu')
+      }else{
+        detailMenu.classList.remove('fixedMenu')
+      }
+    }
+    window.addEventListener("scroll", scrollStart);
+  }
+  
+}
+
+// function (tab 관련 함수 active)
+const moreMsg = () =>{
+  var moreBtn = document.querySelectorAll('.fnMoreBtn')
+  // var moreMenu = document.querySelectorAll('.listTitle')
+  var tabMenu = document.querySelectorAll('.detailMenu .menuTab li')
+  var tabContent = document.querySelectorAll('.detailMenu .tebContent')
+  var infoChoiceTab = document.querySelectorAll('.infoChoice .fnTabMenu li')
+  var infoChoiceCon = document.querySelectorAll('.infoChoice .tebContent')
+  
+  moreBtn.forEach((v)=>{
+    v.addEventListener("click", function(e){
+      e.preventDefault()
+      this.classList.toggle('active')
+      this.previousSibling.classList.toggle('active')
+    })
+  })
+
+  infoChoiceTab.forEach((v) =>{
+    v.addEventListener('click', function(e){
+      e.preventDefault();
+      for(let siblings of this.parentNode.children){
+        siblings.classList.remove('active')
+      }
+      for(let siblingsContent of infoChoiceCon){
+        siblingsContent.classList.remove('active')
+      }
+      var cdx = document.querySelector(this.children[0].hash)
+      this.classList.add('active')
+      cdx.classList.add('active')
+    })
+  })
+
+  tabMenu.forEach((v) =>{
+    v.addEventListener('click', function(e){
+
+      e.preventDefault();
+
+      for(let siblings of this.parentNode.children){
+        siblings.classList.remove('active')
+      }
+      
+      for(let siblingsContent of tabContent){
+        siblingsContent.classList.remove('active')
+      }
+
+      var cdx = document.querySelector(this.children[0].hash)
+      this.classList.add('active')
+      cdx.classList.add('active')
+      window.scrollTo({
+        top: cdx.offsetTop - 92
+      })
+    })
+  })
+}
+
+// function (복사) copyAddress_store classname을 가진 태그의 값을 클립보드로 복사
+const copyMsg = (e) =>{
+  var copyAddress = document.querySelector(".copyAddress_store").innerText
+  var tempElem = document.createElement("textarea")
+  document.body.appendChild(tempElem)
+  tempElem.value = copyAddress;
+  tempElem.select();
+  document.execCommand("copy")
+  document.body.removeChild(tempElem)
+}
+
+// function 토스트 숨기기
+const toastCallback = (data) => {
+  data.dispatch({type : REDUCER_ACTION.HIDE_TOAST})
+
+  if(data.code === -4){
+    if(data.sdlContextData.channel.channelUIType === 'C'){
+      data.dispatch({type: REDUCER_ACTION.INIT_DELIVERY_ADDRESS})
+    }
+  }
+  
+}
+
+// 컴포넌트 (상단 우측 장바구니)
 const CartComponent = () => {
   const cnt = getCartCnt()
   return (
     cnt !== 0 ?
-    <Link to={{pathname: ACTION.LINK_CART}} className="icon orderCart">
-      장바구니
-      <span className="cartNum">{cnt}</span>
-    </Link>
+      <Link to={{pathname: ACTION.LINK_CART}} className="icon orderCart">
+       장바구니
+        <span className="cartNum">{cnt}</span>
+     </Link>
     :
     null
   )
 }
 
+// function 
 function clickedQ (dispatch) {
   dispatch({type : 'TOAST', payload : {show : true , data : {msg: '실제 배달시간과는 차이가 있을 수 있습니다.', code : '', dispatch : dispatch} , callback : toastCallback}})
 }
 
+// function 픽업, 배달 선택 함수
 function changeBalloonButton(setBalloon, BalloonData, changeOrderType, OrderTypeData, bizCtgGrp, searchKeyword, dispatch) {
 
   const data = {
@@ -784,6 +822,7 @@ function changeBalloonButton(setBalloon, BalloonData, changeOrderType, OrderType
 
 }
 
+// function 최소주문 계산
 const calcMinOderPrice = (cartData) => {
 
     const dlMinOrdrPrc9icp = cartData.dlMinOrdrPrc9icp
@@ -794,3 +833,5 @@ const calcMinOderPrice = (cartData) => {
 
     return Math.max.apply(null, arr);
 }
+
+//////////////////////////////////funcion//////////////////////////////////////////
