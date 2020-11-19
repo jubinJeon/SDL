@@ -1,6 +1,3 @@
-home
-
-
 /*global kakao*/
 import React, {useRef,createRef,useState, useCallback, useEffect,useContext} from 'react';
 import Swiper from 'react-id-swiper';
