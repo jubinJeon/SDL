@@ -3,6 +3,7 @@
 export const DISPATH_CODE = {
     CLOSE_APP : 100,
     CALL_PAYMENT : 201,
+    ORDER_COMPLETE : 202,
     START_PERMISSION : 101,
     QR_READER : 300,
     ZERO_PAY : 400,
@@ -38,6 +39,16 @@ export const SDL_dispatchCallPayment = (data) => {
     }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
         console.log('SDL_dispatchStartPermission')
         window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.CALL_PAYMENT , data : data }))
+    }
+    
+}
+
+export const SDL_dispatchOrderComplete = () => {
+    if(window.appBridge){
+        window.appBridge.dispatch(DISPATH_CODE.ORDER_COMPLETE,'');
+    }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
+        console.log('SDL_dispatchOrderComplete')
+        window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.ORDER_COMPLETE , data : '' }))
     }
     
 }

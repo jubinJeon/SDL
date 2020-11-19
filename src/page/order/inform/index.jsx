@@ -5,6 +5,7 @@ import * as ACTION from '../../../common/ActionTypes'
 import { numberFormat, unescapehtmlcode } from '../../../util/Utils' 
 import {SDLContext} from '../../../context/SDLStore'
 import {REDUCER_ACTION} from '../../../context/SDLReducer'
+import {SDL_dispatchOrderComplete} from '../../../appBridge'
 
 
 const OrderInform = ( {history, location} ) => {
@@ -90,7 +91,9 @@ const OrderInform = ( {history, location} ) => {
                             </p>
                         </div>   
                         }
-                                         
+                        
+                        {data.channel.channelUIType !== 'A' && SDL_dispatchOrderComplete()}
+
                         <div className="orderInfoList">
                             <ul className="infoLIst">
                                 <li>
