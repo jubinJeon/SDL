@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useContext, useCallback, useMemo } 
 import * as API from '../../Api'
 import ListComponent from '../../components/listComponent'
 import {SDLContext} from '../../context/SDLStore'
+import {REDUCER_ACTION} from '../../context/SDLReducer'
 import { getRecentSearch, setRecentSearch, removeAllRecentSearch, removeRecentSearch, pullDefaultAddress, pullShowScreen, pushShowScreen} from '../../util/Utils'
 
 const Search = ({history, location}) => {
@@ -45,7 +46,7 @@ const Search = ({history, location}) => {
     })
 
     const btnBackClick = () =>{
-        history.goBack();
+        dispatch({type:REDUCER_ACTION.HISTORY_BACK})
     };
 
     const btnRemoveAllSearch =  () => {
