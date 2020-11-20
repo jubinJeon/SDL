@@ -30,10 +30,17 @@
 
 	a. 터미널 창에 "npm start" 입력 후 엔터<br />
 	b. 개발 서버 시작<br />
-	
+
+    => 변경(개발) : npm run debug.dev
+	=> 변경(운영) : npm run debug.prd
+
 6. 빌드 및 개발 서버 배포
 
 	a. 터미널 창에 "npm run build" 입력 후 엔터<br />
+
+	=> 변경(개발) : npm run build.dev
+	=> 변경(운영) : npm run build.prd
+
 	b. 빌드<br />
 	c. FTP 통해 /kis/kisweb/smartorder/nweb/www 폴더 빌드 된 파일 전송<br />
      (단 전송전 원격지의 precached-manifest 파일과 static 폴더를 삭제후 전송)<br />
