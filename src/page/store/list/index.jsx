@@ -163,10 +163,8 @@ const ContentSection = ({defaultAddress, bizCtgDtlData}) => {
                 <div id="content">
                     <div>
                         {
-/*                          채널링 타입 카테고리 표현여부
+                            // 채널링 타입 카테고리 표현여부
                             data.channel.channelUIType === 'A' && <CategorySection callback = {setBizCtgDtl} bizCtgDtlData={bizCtgGrp}/>
-*/
-                            <CategorySection callback = {setBizCtgDtl} bizCtgDtlData={bizCtgGrp}/>
                         }
                         {
                             bizCtgGrp === process.env.REACT_APP_REST_AREA_CATEGORY_CODE ?
