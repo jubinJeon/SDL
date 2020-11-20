@@ -186,15 +186,14 @@ const Channel = () => {
       const chnlStrId = res.data.chnlStrId
       const storeCd = res.data.storeCd
       const chnlCd = res.data.chnlId
-      const bizCtgShowYn = res.data.bizCtgShowYn 
+      const bizCtgShowYn = res.data.bizCtgShowYn
 
-      let channelUIType = 'A'
+      let channelUIType = 'B'
 
-      if (bizCtgShowYn !== 'Y'){
-        channelUIType = 'B'
-      }
-      
-      if (chnlScrn === 'SCR02'){
+      if (chnlScrn === 'SCR01'){
+        if(bizCtgShowYn === 'N')
+          channelUIType = 'D'
+      }else if (chnlScrn === 'SCR02'){
         channelUIType = 'C'
       }
 
