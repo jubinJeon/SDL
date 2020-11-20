@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import * as API from '../../../Api'
 import * as ACTION from '../../../common/ActionTypes'
 import { getCartCnt, pullDefaultAddress, unescapehtmlcode, numberFormat, pullCartData, changeShowToast, 
-  changeOrderType, makeParamForCreateOrder, pushShowScreen, pullShowScreen, removeCartDataAll, tmFormat } from '../../../util/Utils'
+  changeOrderType, makeParamForCreateOrder, pushShowScreen, pullShowScreen, removeCartDataAll, tmFormat, getOS } from '../../../util/Utils'
 import { SDL_dispatchCallPhone,SDL_dispatchShared } from '../../../appBridge'
 // Version >= 2.4.0
 import 'swiper/css/swiper.css';
@@ -118,6 +118,10 @@ export default ({ history, location }) => {
       })
       .catch((error) => {
           setResultInfoData([]);
+      })
+      .finally(() =>{
+        if(getOS() === 'IOS')
+          window.scrollTo(0,1);
       })
     }
   }, []);

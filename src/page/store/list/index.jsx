@@ -257,6 +257,10 @@ const StoresSection = ({ bizCtgGrp, defaultAddress}) => {
                 .catch((error) => {
                     setComponentData({resultData : null})
                 })
+                .finally(() =>{
+                    if(getOS() === 'IOS')
+                        window.scrollTo(0,1);
+                })
             }
     },[bizCtgGrp,defaultAddress])
 
@@ -357,6 +361,10 @@ const RestAreaSection = ()=>{
         
         .catch((error) => {
             setHignways([]);
+        })
+        .finally(() =>{
+            if(getOS() === 'IOS')
+                window.scrollTo(0,1);
         })
     }, []);
 
