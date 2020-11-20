@@ -90,11 +90,9 @@ const Search = ({history, location}) => {
             <div id="header">
                 <div className="headerTop">
                     {
-                        data.channel.channelUIType === 'A' && (
-                            <div className="leftArea">
-                                <a onClick={btnBackClick} className="icon pageBack">Back</a>
-                            </div>
-                        )
+                        <div className="leftArea">
+                            <a onClick={btnBackClick} className="icon pageBack">Back</a>
+                        </div>
                     }
 
                     <div className="middleArea search">
