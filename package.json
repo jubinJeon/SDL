@@ -25,6 +25,11 @@
     "typescript": "^3.9.3"
   },
   "scripts": {
+    "debug.dev": "node ./build.js dev && react-scripts start",
+    "debug.prd": "node ./build.js prd && react-scripts start",
+    "build.dev": "node ./build.js dev && node ./update-build.js && react-scripts build",
+    "build.prd": "node ./build.js prd && node ./update-build.js && react-scripts build",
+
     "start": "react-scripts start",
     "build": "node ./update-build.js && react-scripts build",
     "test": "react-scripts test",
@@ -45,5 +50,5 @@
       "last 1 safari version"
     ]
   },
-  "buildDate": 1605765817584
+  "buildDate": 1605876526251
 }
