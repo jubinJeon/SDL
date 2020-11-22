@@ -137,7 +137,7 @@ const Content1 = (props) => {
     }
 
 
-    if(props.searchResult !== null && props.searchResult.data.length > 0){
+    if(props.searchResult !== null && props.searchResult.length > 0 && props.searchResult.data.length > 0){
         
         let checkCnt = 0
         props.searchResult.data.map((check) => {
@@ -149,7 +149,7 @@ const Content1 = (props) => {
         )
     }
 
-    else if(props.searchResult !== null && props.searchResult.data.length === 0){
+    else if(props.searchResult !== null && (props.searchResult.length === 0 || props.searchResult.data.length === 0)){
         return emptyComponent()
     }
 
