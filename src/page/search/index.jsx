@@ -137,21 +137,19 @@ const Content1 = (props) => {
     }
 
 
-    if(props.searchResult !== null && props.searchResult.length > 0 && props.searchResult.data.length > 0){
-        
+    if(props.searchResult !== null && (props.searchResult.length === 0 || props.searchResult.data.length === 0)){
+        return emptyComponent()
+    }
+    else if(props.searchResult !== null && props.searchResult.data.length > 0){
         let checkCnt = 0
         props.searchResult.data.map((check) => {
- //           if(check.isHld === "Y") checkCnt += 1
+    //           if(check.isHld === "Y") checkCnt += 1
         })
         return (
             checkCnt === props.searchResult.data.length ? emptyComponent() : 
             <ListComponent data={props.searchResult.data} bizCtgGrp="" callback = {changeFilter}/>
         )
-    }
-
-    else if(props.searchResult !== null && (props.searchResult.length === 0 || props.searchResult.data.length === 0)){
-        return emptyComponent()
-    }
+    } 
 
     return (
         <>
