@@ -130,7 +130,14 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
                     SDL_dispatchCloseApp()
                 }
             }
-            
+            else if (history.location.pathname === ACTION.LINK_SEARCH){
+                data.history.action = ''
+                if(data.channel.channelUIType === 'A'){
+                    history.goBack()
+                }else{
+                    SDL_dispatchCloseApp()
+                }
+            }
             else if (history.location.pathname === ACTION.LINK_ORDER_FORM) {
                 data.history.action = ''
                 history.replace(location.state.from);      
