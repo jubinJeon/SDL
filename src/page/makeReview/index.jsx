@@ -123,10 +123,10 @@ export default ( {history, location}) => {
 
             Resizer.imageFileResizer(
                 e.target.files[0],
-                300,
-                300,
+                600,
+                600,
                 'JPEG',
-                80,
+                100,
                 0,
                 uri => {
                     // console.log(uri)
