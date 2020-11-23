@@ -8,17 +8,18 @@ import {REDUCER_ACTION} from '../../context/SDLReducer'
 import * as ACTION from '../../common/ActionTypes'
 import {unescapehtmlcode} from '../../util/Utils'
 import {SDLContext} from '../../context/SDLStore'
-
+/**
+ * **************************MAIN***********************************************************
+ */
 export default ( {history, location}) => {
-    
+
     const {dispatch} = useContext(SDLContext);
-
-    useEffect(() => {
-        if(location.ordrKindCd == null) history.goBack()
-    })
-
+    const textRef = useRef();
+    const photoRef = useRef();
+    // 화면, 별점
+    const [rating, setRating] = useState(0);
     // 팝업
-    const [modal, setModal] = useState({
+    const [modal, setModal] = useState({  
         showModal: false,
         dataModal: {
             type: "",
@@ -26,84 +27,57 @@ export default ( {history, location}) => {
             desc: "",
             handleComfirm: ''
         }
+    });
+    // 등록 (10자 갯수)
+    const [appliable, setAble] = useState(false);
+    // 이미지 세팅
+    const [imgSrc, setImgSrc] = useState([]);
+    // 미리보기 이미지
+    const [imgPreview, setPrev] = useState([]);
+    // 이미지 붙이기
+    const [attachable, setAttachable] = useState(true)
+
+    //////////////////////hook//////////////////////////////////// 
+    useEffect(() => {
+        if(location.ordrKindCd == null) history.goBack()
     })
+    // 10자 등록 갯수 
+    useEffect(() => {
+        checkAppliable()
+    }, [rating])
+    // 이미지 붙이기 
+    useEffect(() => {
+        if( imgSrc.length > 2)
+            setAttachable(false)
+        else
+            setAttachable(true)
+    }, [imgSrc]);
+    // 이미지 프리뷰
+    useEffect(() => {
+        console.log(imgPreview)
+    }, [imgPreview]);
+
+     //////////////////////hook//////////////////////////////////// 
+    
+    // function 안쓰임
     const handleClickOpen = (data) => {
         setModal({
             showModal: true,
             dataModal: data
         })
     };
+
+    // function 안쓰임
     const handleClose_modal = () => {
         setModal({ ...modal, showModal: false });
     };
     
-    // 토스트
+    // function 토스트
     const toastCallback = (data) => {
         data.dispatch({type : 'TOAST', payload : {show : false }})
     }
-
-    const handleBackBtn = (e) => {
-        e.preventDefault();
-
-        if(textRef.current.value.length < 1)
-            history.goBack()
-        else dispatch({ type: REDUCER_ACTION.SHOW_CONFIRM,
-                payload: {data: {title: '알림', desc: '입력하신 정보가 저장되지 않습니다. 정말 다음에 작성하시겠습니까?'},
-            callback: (res) => {
-                if(res == 1) {
-                    history.goBack()
-                    dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
-                } else dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
-            }
-        }})
-        
-    }
-
-    // 화면
-    // 별점
-    const [rating, setRating] = useState(0)
-
-    const onClickStar = (e) => {
-        setRating( e.target.dataset.rate )
-    }
-    
-    const textRef = useRef()
-    const photoRef = useRef()
-
-    useEffect(() => {
-        checkAppliable()
-    }, [rating])
-
-    const [appliable, setAble] = useState(false)
-
-    const checkAppliable = () => {
-        if(textRef.current.value.length > 9 && rating > 0)
-            setAble(true)
-        else setAble(false)
-    }
-
-    const [imgSrc, setImgSrc] = useState([])
-    const [imgPreview, setPrev] = useState([])
-    const [attachable, setAttachable] = useState(true)
-
-    useEffect(() => {
-        // console.log(imgSrc)
-        
-        if( imgSrc.length > 2)
-            setAttachable(false)
-        else
-            setAttachable(true)
-    }, [imgSrc])
-
-    useEffect(() => {
-        console.log(imgPreview)
-    }, [imgPreview])
-
-    const deleteImg = (key) => {
-        setImgSrc(imgSrc.filter( img => img.id != key ))
-        setPrev(imgPreview.filter( img => img.id != key ))
-    }
-
+     
+    // function (사진 첨부) 
     const readFile = (e) => {
         var dupl = false;
 
@@ -148,6 +122,43 @@ export default ( {history, location}) => {
         e.target.value = ''
     }
 
+    // 이벤트 헨들러 (뒤로가기)
+    const handleBackBtn = (e) => {
+        e.preventDefault();
+
+        if(textRef.current.value.length < 1)
+            history.goBack()
+        else dispatch({ type: REDUCER_ACTION.SHOW_CONFIRM,
+                payload: {data: {title: '알림', desc: '입력하신 정보가 저장되지 않습니다. 정말 다음에 작성하시겠습니까?'},
+            callback: (res) => {
+                if(res == 1) {
+                    history.goBack()
+                    dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
+                } else dispatch({type : REDUCER_ACTION.HIDE_CONFIRM})
+            }
+        }})
+        
+    }
+    
+    // 이벤트 헨들러 (별점주기)
+    const onClickStar = (e) => {
+        setRating( e.target.dataset.rate )
+    }
+
+     // 이벤트 헨들러 (10자이상 검사)
+     const checkAppliable = () => {
+        if(textRef.current.value.length > 9 && rating > 0)
+            setAble(true)
+        else setAble(false)
+    }
+
+    // 이벤트 헨들러 (사진 삭제 x버튼)
+    const deleteImg = (key) => {
+        setImgSrc(imgSrc.filter( img => img.id != key ))
+        setPrev(imgPreview.filter( img => img.id != key ))
+    }
+
+    // 이벤트 헨들러 (리뷰 등록 
     async function sendReview () {
         
         axios.defaults.baseURL = process.env.REACT_APP_SDL_API_DOMAIN + '/api/v1'
@@ -232,11 +243,22 @@ export default ( {history, location}) => {
         // })
 
     }
-    
 
+    // 이벤트 헨들러 (10자 이하 토스트로 뿌리기)
+    // => 2020.11.23 NEW 신규추가
+    const toastReview = () => {
+        let reviewData = textRef.current.value;
+        if(reviewData.length <= 9 || rating < 1){
+            dispatch({type : 'TOAST', payload : {show : true , data : {msg: '리뷰 등록을 위해 별점 및 10자 이상의 리뷰를 작성해주세요', code : '', dispatch : dispatch} , callback : toastCallback}});
+        }
+    };
+    
     return (
         <div id="wrap">
             {/* <Alert open={modal.showModal} data={modal.dataModal} handleClose={handleClose_modal}></Alert> */}
+            {/**
+             * HEADER 부분
+             */}
             <div id="header">
                 <div className="headerTop">
                     <div onClick={handleBackBtn} className="leftArea">
@@ -247,9 +269,18 @@ export default ( {history, location}) => {
                     </div>
                 </div>
             </div>
+             {/**
+             * HEADER 부분
+             */}
+            {/**
+             * BODY 부분
+             */}
             <div id="container">
                 <div id="content">
                     <div className="">
+                         {/**
+                         * TITLE SECTION
+                         */}
                         <div className="staticTitleView">
                             <div>
                                 <div className="statusLabel">
@@ -266,7 +297,14 @@ export default ( {history, location}) => {
                             </div>
                         </div>
                         <div className="sectionBlock"></div>
+                        
+                         {/**
+                         * 별점, 사진, 등록, 취소 SECTION
+                         */}
                         <div className="reviewRegister">
+                             {/**
+                             * 별점, 사진 
+                             */}
                             <div>
                                 <p className="ratingMsg"><strong>별점을 평가해 주세요.</strong></p>
                                 <div className="ratingStar big fnRating">
@@ -305,25 +343,30 @@ export default ( {history, location}) => {
                                     </div>
                                 </div>
                             </div>
+                            {/**
+                             * 등록, 취소 
+                             */}
                             <div className="btnWrap typeFlex">
                                 <ul className="btnArea">
                                     <li><a onClick={handleBackBtn} className="btn register default"><strong>취소</strong></a></li>
                                     <li>
                                         {appliable ? <a onClick={sendReview} className={ "btn login apply" }><strong>등록</strong></a>
-                                        : <a className={ "btn login apply disable"}><strong>등록</strong></a> }
+                                        : <a className={ "btn login apply disable"} onClick={toastReview} ><strong>등록</strong></a> }
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        
-
                     </div>
                 </div>
             </div>
+             {/**
+             * BODY 부분
+             */}
         </div>
     )
 }
 
+//  컴포넌트 (이미지)
 const AttachedImg = ({img, deleteImg, index}) => {
 
     return (
