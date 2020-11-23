@@ -347,7 +347,7 @@ export default ({ history, location }) => {
                         <h1 className="infoTitle">{unescapehtmlcode(resultInfoData.bsnInfoVo.strNm)}</h1>
                         <div className="infoShare">
                           <button type="button" className={resultInfoData.bsnInfoVo.dipStrYn === "Y" ? "btn like active" : "btn like"} onClick={toggleLiked_rest}>찜</button>
-                          <button type="button" className="btn share" onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>
+                          {/*<button type="button" className="btn share" onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>*/}
                         </div>
                       </div>
                     </div>
@@ -426,7 +426,7 @@ export default ({ history, location }) => {
                         </div> */}
                         <div className="infoShare">
                           <button type="button" className={resultInfoData[0].dipStrYn === "Y" ? "btn like active" : "btn like"} onClick={toggleLiked}>찜</button>
-                          <button type="button" className="btn share"  onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>
+                          {/*<button type="button" className="btn share"  onClick={() => {goShared(location.state.strId,location.state.storeCd)}}>공유</button>*/}
                         </div>
                       </div>
                     </div>
