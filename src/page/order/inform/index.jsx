@@ -92,9 +92,7 @@ const OrderInform = ( {history, location} ) => {
                         </div>   
                         }
                         
-                        {data.channel.channelUIType !== 'A' && SDL_dispatchOrderComplete()}
-
-                        <div className="orderInfoList">
+                         <div className="orderInfoList">
                             <ul className="infoLIst">
                                 <li>
                                 {orderData.ordrKindCd.indexOf('9') !== -1 ?

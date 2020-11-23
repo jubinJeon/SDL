@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { getCartCnt, removeCartDataAll,pushCartData } from './util/Utils'
 import {REDUCER_ACTION} from './context/SDLReducer'
 import * as ACTION from './common/ActionTypes'
-import {SDL_dispatchCloseApp} from './appBridge'
+import {SDL_dispatchCloseApp, SDL_dispatchOrderComplete} from './appBridge'
 
 const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
 
@@ -144,8 +144,15 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
 
             }
             
-            else if (history.location.pathname === ACTION.LINK_ORDER_SUCCESS
-            || history.location.pathname === ACTION.LINK_MY_SDL
+            else if (history.location.pathname === ACTION.LINK_ORDER_SUCCESS) {
+                data.history.action = ''
+                if(data.channel.channelUIType === 'A'){
+                    history.replace({pathname:ACTION.LINK_HOME, state : {from : data.mainLocation}})
+                }else{
+                    SDL_dispatchOrderComplete()
+                }                
+            }
+            else if (history.location.pathname === ACTION.LINK_MY_SDL
             || history.location.pathname === ACTION.LINK_ORDER_HISTORY
             || history.location.pathname === ACTION.LINK_MY_JJIM
             || history.location.pathname === ACTION.LINK_ZERO_PAY
