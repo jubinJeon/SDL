@@ -144,7 +144,7 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
 
             }
             
-            else if (history.location.pathname === ACTION.LINK_ORDER_SUCCESS) {
+/*            else if (history.location.pathname === ACTION.LINK_ORDER_SUCCESS) {
                 data.history.action = ''
                 if(data.channel.channelUIType === 'A'){
                     history.replace({pathname:ACTION.LINK_HOME, state : {from : data.mainLocation}})
@@ -153,6 +153,9 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
                 }                
             }
             else if (history.location.pathname === ACTION.LINK_MY_SDL
+*/
+            else if (history.location.pathname === ACTION.LINK_ORDER_SUCCESS
+            || history.location.pathname === ACTION.LINK_MY_SDL
             || history.location.pathname === ACTION.LINK_ORDER_HISTORY
             || history.location.pathname === ACTION.LINK_MY_JJIM
             || history.location.pathname === ACTION.LINK_ZERO_PAY
