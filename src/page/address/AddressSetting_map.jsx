@@ -245,12 +245,7 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         <>
             <div className="">
                 <div className="mapSearch">
-                    <div className="mapArea" id="myMap" >지도 영역
-                    
-                        <div>askdjasldjkask,xcmvn,xmcvnksdjfksdjfklj</div>
-                    
-                    
-                    </div>
+                    <div className="mapArea" id="myMap" >지도 영역</div>
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
@@ -268,6 +263,3 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         </>
     )
 }
-
-
-
