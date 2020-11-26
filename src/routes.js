@@ -77,7 +77,6 @@ import SDLRoute from './SDLRoute';
 import {SDLContext} from './context/SDLStore'
 import {REDUCER_ACTION} from './context/SDLReducer'
 
-
 export default ({location,history}) => {
 
   return (
@@ -158,15 +157,19 @@ export default ({location,history}) => {
             <SDLRoute exact path={ACTION.LINK_BANNER_LIST} component={BannerList} />
             <SDLRoute exact path={ACTION.LINK_BANNER_DETAIL} component={BannerDetail} />
 
-          
             {/* ERROR */}
             <SDLRoute component={Error404} />
-          
+ 
       </Switch>
     </>
   )
 }
 
+/**
+ * 채널 컴포넌트 
+ * API를 통해 /#~~~~
+ * #뒤에 API를 통해 컴포넌트 페이지 이동
+ */
 const Channel = () => {
 
   console.log("-------------------")
@@ -223,6 +226,8 @@ const Channel = () => {
         history.replace( ACTION.LINK_MY_JJIM)
       }else if(chnlScrn === 'SCR06'){ // 검색
         history.replace( ACTION.LINK_SEARCH)
+      }else if(chnlScrn === 'SCR07'){ // 2020.11.26 => 모범생 채널 (주소세팅 위해) 
+        history.replace( ACTION.LINK_ADDRESS_SETTING)
       }
 
     })
@@ -238,6 +243,11 @@ const Channel = () => {
 
 }
 
+/**
+ * FUNCTION
+ * 기본 path '/' 여기부터 가는 함수 
+ * @param {*} param0 
+ */
 function PrivateRoute({...rest }) {
 
   const {dispatch,data} = useContext(SDLContext)
@@ -255,14 +265,17 @@ function PrivateRoute({...rest }) {
     )
   }
 
+  //01. 앱 허락
   const noticeYN = didNoticeAppPermision()
+  //02. accessId (필수)
   const getHasAccessId = hasAccessId()
-
+  //03. 인트로 동의
   let showIntro = false;
   const introStatus = pullIntroStatus();
 
   console.log(location)
   
+  // HASH있으면 채널컴포넌트
   if(location.hash){
 
       return (
@@ -270,7 +283,7 @@ function PrivateRoute({...rest }) {
           <Channel/>
         </>
       )
-  }else{
+  }else{ //없으면 슬배생 기본 컴포넌트 
     console.log("normal")
     console.log('data' , introStatus)
 
@@ -294,10 +307,15 @@ function PrivateRoute({...rest }) {
     }
 
     console.log('location',location.search)
-    const query = getQueryStringParams(location.search)
+    //위치 url 
+    const query = getQueryStringParams(location.search);
 
-
-
+    /**
+     * 슬배생 컴포넌트 이동 
+     * ex) 1) /?toScreen=MAIN
+     *     2) /?toScreen=ORDER_HISTORY  (주문내역)(주문상세x)
+     *     3) /?toScreen=STORE&strId= ?&storeCd=
+     */ 
     const toScreen = (toScreen) => {
       data.toScreen = toScreen
       data.mainLocation = location
@@ -318,11 +336,6 @@ function PrivateRoute({...rest }) {
       
       <Route {...rest} 
         render={({ location }) =>
-
-          location.hash ? 
-          (<Channel/>)
-          :
-          (
             noticeYN ? 
               (
                 getHasAccessId ? 
@@ -341,7 +354,6 @@ function PrivateRoute({...rest }) {
             (
               <Redirect to={{ pathname: ACTION.LINK_AGREE_PERMISSION, state: { from: location }}} /> 
             )
-          )
         }
       />
     )
