@@ -33,8 +33,9 @@ export default ( {history, location} ) => {
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation()
                 }else{
-    
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                    //신도림 37.5085848476582, 126.888897552736
+                    //모범생 - 원주 전자랜드                      
+                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
                         setLocationData(address)
                     })
                 }           
@@ -49,7 +50,7 @@ export default ( {history, location} ) => {
                     }, function(error) {
                         
                         console.error(error);
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
                             setLocationData(address)
                         })
             
@@ -60,7 +61,7 @@ export default ( {history, location} ) => {
                     });
                 }else{
                     
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
                         setLocationData(address)
                     })
                 }
@@ -244,7 +245,12 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         <>
             <div className="">
                 <div className="mapSearch">
-                    <div className="mapArea" id="myMap" >지도 영역</div>
+                    <div className="mapArea" id="myMap" >지도 영역
+                    
+                        <div>askdjasldjkask,xcmvn,xmcvnksdjfksdjfklj</div>
+                    
+                    
+                    </div>
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
