@@ -72,6 +72,10 @@ import Applink from './AppLink'
 
 import Error404 from './components/Error404.jsx';
 
+/** 채널 페이지 **/
+import { ch00002046Address, ch00002046AddressSetting_map} from './page/ch00002046/index';
+/** 채널 페이지 **/
+
 import SDLRoute from './SDLRoute';
 
 import {SDLContext} from './context/SDLStore'
@@ -157,8 +161,14 @@ export default ({location,history}) => {
             <SDLRoute exact path={ACTION.LINK_BANNER_LIST} component={BannerList} />
             <SDLRoute exact path={ACTION.LINK_BANNER_DETAIL} component={BannerDetail} />
 
+             {/* 채널사 (모범생) */}
+            <SDLRoute path={ACTION.LINK_CH00002046_ADDRESS} component={ch00002046Address} />
+            <SDLRoute path={ACTION.LINK_CH00002046_ADDRESSSetting_map} component={ch00002046AddressSetting_map} />
+
             {/* ERROR */}
             <SDLRoute component={Error404} />
+
+           
  
       </Switch>
     </>
@@ -227,7 +237,7 @@ const Channel = () => {
       }else if(chnlScrn === 'SCR06'){ // 검색
         history.replace( ACTION.LINK_SEARCH)
       }else if(chnlScrn === 'SCR07'){ // 2020.11.26 => 모범생 채널 (주소세팅 위해) 
-        history.replace( ACTION.LINK_ADDRESS_SETTING)
+        history.replace( ACTION.LINK_CH00002046_ADDRESS)
       }
 
     })
