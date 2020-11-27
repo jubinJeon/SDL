@@ -33,37 +33,33 @@ export default ( {history, location} ) => {
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation()
                 }else{
-                    //신도림 37.5085848476582, 126.888897552736
-                    //모범생 - 원주 전자랜드                      
-                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                        setLocationData(address)
-                    })
+                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                        setLocationData(address);
+                    });
                 }           
             }else {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-        
+                    navigator.geolocation.getCurrentPosition(function(position) {     
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
                             setLocationData(address)
                         })
         
                     }, function(error) {
-                        
+                   
                         console.error(error);
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setLocationData(address)
-                        })
+                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                            setLocationData(address);
+                        });
             
                     }, {
                         enableHighAccuracy: true,
                         maximumAge: 0,
                         timeout: 2000
                     });
-                }else{
-                    
-                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                        setLocationData(address)
-                    })
+                }else{             
+                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                        setLocationData(address);
+                    });
                 }
             }
         }else if (type === 2){ // 주소로 검색
@@ -108,8 +104,8 @@ export default ( {history, location} ) => {
             })
         }else{
             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setLocationData(address)
-            })
+                setLocationData(address);
+            });
         }
         
     }
@@ -263,3 +259,6 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         </>
     )
 }
+
+
+
