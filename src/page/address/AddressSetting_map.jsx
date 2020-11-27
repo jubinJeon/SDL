@@ -29,13 +29,12 @@ export default ( {history, location} ) => {
 
         if(type === 1){ // 현재위치로 검색
             if(getOS() === 'IOS'){
-
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation()
                 }else{
                     addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
                         setLocationData(address);
-                    });
+                    });   
                 }           
             }else {
                 if (navigator.geolocation) {
@@ -236,7 +235,7 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         }
         history.replace(from)
     }
-    
+
     return (
         <>
             <div className="">
