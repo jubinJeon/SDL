@@ -11,6 +11,7 @@
     "bootstrap": "^4.5.2",
     "classnames": "^2.2.6",
     "moment": "^2.29.1",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-confirm-alert": "^2.6.1",
@@ -29,7 +30,6 @@
     "debug.prd": "node ./build.js prd && react-scripts start",
     "build.dev": "node ./build.js dev && node ./update-build.js && react-scripts build",
     "build.prd": "node ./build.js prd && node ./update-build.js && react-scripts build",
-
     "start": "react-scripts start",
     "build": "node ./update-build.js && react-scripts build",
     "test": "react-scripts test",
