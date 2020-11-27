@@ -34,7 +34,7 @@ export default ( {history, location} ) => {
                 }else{
                     addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
                         setLocationData(address);
-                    });   
+                    });     
                 }           
             }else {
                 if (navigator.geolocation) {
