@@ -63,6 +63,11 @@ export const LINK_AGREE_PERMISSION = '/agree/permission'
 
 export const LINK_APP_LINK = '/applink'
 
+/** 채널 모범생 주소 링크 */
+export const LINK_CH00002046_ADDRESS = '/ch00002046/Address';
+export const LINK_CH00002046_ADDRESSSetting_map = '/ch00002046/AddressSetting_map';
+/** 채널 모범생 주소 링크 */
+
 
 
 
