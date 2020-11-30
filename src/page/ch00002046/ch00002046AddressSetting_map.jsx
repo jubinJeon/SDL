@@ -274,7 +274,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
     // 이벤트 핸들러
     const handleBtnClick = () => {
         const detailAddress = inputRef.current.value
-        const addressData = {...defaultAddress, address_detail : detailAddress}
+        const addressData = {...defaultAddress.address, address_detail : detailAddress}
 
         pushDefaultAddress(addressData,'KAKAO_API')
         pushSearchAddress(addressData)
@@ -311,7 +311,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         <>
             <div className="">
                 <div className="mapSearch">
-                    <div className="mapArea" id="myMap" >지도 영역</div> 
+                    <div className="mapArea" id="myMap" ></div> 
                     {getOS() === 'IOS' ? null : gpsButton}
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
