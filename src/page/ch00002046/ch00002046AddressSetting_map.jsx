@@ -295,7 +295,9 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
     // 이벤트 핸들러 (내 위치)
     const handlechangeMarkerClinck = (e) => {
         //주소 바뀔때 들어왔을때만
-        callback(1, true);      
+        setTimeout(()=>{
+            callback(1, true);   
+        }, 800)     
     };
 
     return (
