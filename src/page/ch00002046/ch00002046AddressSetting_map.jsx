@@ -197,7 +197,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
      */
     useEffect(()=>{
         //다 그리고 해야함
-        if (defaultLat !== 0 && defaultLng !== 0){
+        if (defaultLat !== 0 && defaultLng !== 0) {
 
             let latlng = new kakao.maps.LatLng();
             let container = document.getElementById("myMap");
@@ -260,16 +260,13 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
                 
                 // latlng2Addr( latlng.getLng(), latlng.getLat() )
             })
-
-            return() => {
-                let container = document.getElementById("myMap");
-                let options = {
-                    center: new kakao.maps.LatLng(0, 0),
-                    level: 3
-                };
-                let map = new window.kakao.maps.Map(container, options);    
-            }
         }
+        return () => {
+            //주소 바뀔때 들어왔을때만
+            document.querySelector("#myMap > div:nth-child(3)").remove();
+            document.querySelector("#myMap > div:nth-child(2)").remove();
+            document.querySelector("#myMap > div:nth-child(1)").remove();
+        };
 
     }, [defaultAddress.converseGpsButtonFG]);
   
@@ -309,7 +306,6 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
                         <ul>
                             <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
                                 <img src = {gpsImage}></img>
-                                <p>내위치</p> 
                             </li>
                         </ul>
                     </div>

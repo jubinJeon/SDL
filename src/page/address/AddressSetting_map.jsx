@@ -233,7 +233,14 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
             onChangeCenterListener(latlng);
             
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
-        })
+        });
+
+        return () => {
+            //주소 바뀔때 들어왔을때만
+            document.querySelector("#myMap > div:nth-child(3)").remove();
+            document.querySelector("#myMap > div:nth-child(2)").remove();
+            document.querySelector("#myMap > div:nth-child(1)").remove();
+        }
     }, [converseGpsButtonFg]);
 
     // 이벤트 핸들러
@@ -253,10 +260,9 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
     // 이벤트 핸들러 (내 위치) 너무 막누르면 카카오맵 뻗음
     const handlechangeMarkerClinck = (e) => {
          e.stopPropagation();
-        //주소 바뀔때 들어왔을때만
         setTimeout(()=>{
             callback(1);   
-        }, 1000);   
+        }, 50);   
     };
 
     return (
@@ -268,7 +274,6 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
                         <ul>
                             <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
                                 <img src = {gpsImage}></img>
-                                <p>내위치</p> 
                             </li>
                         </ul>
                     </div>
