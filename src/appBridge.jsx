@@ -23,13 +23,15 @@ export const DISPATH_CODE = {
 //6: 소셜로그인(로그인)
 //7: pg결제
 
-export const SDL_dispatchCloseApp = () => {
+export const SDL_dispatchCloseApp = (data) => {
+    let JsonData = data;
+    if (JsonData === undefined) JsonData = '';
     if(window.appBridge){
         console.log('SDL_dispatchCloseApp')
         window.appBridge.dispatch(DISPATH_CODE.CLOSE_APP,'');  
     }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
         console.log('SDL_dispatchCloseApp')
-        window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.CLOSE_APP , data : '' }))
+        window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.CLOSE_APP , data : JsonData }))
     }
 }
 
