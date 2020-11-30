@@ -4,7 +4,7 @@ import { Link,useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 import * as ACTION from '../../common/ActionTypes'
-import { pullSearchAddress, pushDefaultAddress, removeSearchAddress } from '../../util/Utils'
+import {pullDefaultAddress, pullSearchAddress, pushDefaultAddress, removeSearchAddress } from '../../util/Utils'
 import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import {SDL_dispatchCloseApp} from '../../appBridge'
@@ -23,8 +23,13 @@ export default ({history,location}) => {
     // 이벤트 헨들러
     const handleOnClick = (e) =>{
         e.preventDefault();
+
+        let jsonAddressData = {
+            defaultAddress : pullDefaultAddress,
+            searchAddress : pullSearchAddress
+        };
         //앱종료
-        SDL_dispatchCloseApp();
+        SDL_dispatchCloseApp(jsonAddressData);
         //dispatch (close add)
     }
 
@@ -162,9 +167,14 @@ const SearchAddress = ({history}) => {
             <li key={address.key}>
                 <a onClick={()=> {
                                 pushDefaultAddress(address,'KAKAO_API');
-                                dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
+                                dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS});
+
+                                let jsonAddressData = {
+                                    defaultAddress : address,
+                                    searchAddress : pullSearchAddress
+                                };
                                 //앱종료
-                                 SDL_dispatchCloseApp();
+                                 SDL_dispatchCloseApp(jsonAddressData);
                                 }
                 }>
                     {address.address.address_name} { address.address_detail }
