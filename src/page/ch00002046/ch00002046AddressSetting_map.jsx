@@ -297,7 +297,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         //주소 바뀔때 들어왔을때만
         setTimeout(()=>{
             callback(1, true);   
-        }, 1000)     
+        }, 50)     
     };
 
     return (
