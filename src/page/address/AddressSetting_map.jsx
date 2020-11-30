@@ -5,6 +5,9 @@ import { pushDefaultAddress, pushSearchAddress,getOS,addressSearchByCoords,addre
 import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import {SDL_dispatchGetLocation} from '../../appBridge'
+import gpsImage from './image/gpsImg.jpg';
+
+const styles = require('./AddressSetting_map.module.scss');
 
 /**
  ****** MAIN ***** 
@@ -17,75 +20,82 @@ export default ( {history, location} ) => {
      */
     const {dispatch,data} = useContext(SDLContext);
     const [locationData, setLocationData] = useState(null);
+    const [converseGpsButtonFg, SetConverseGpsButtonFg] = useState(false);
 
     /** 
      * hook
      */
     useEffect(()=>{
-
         window.addEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
 
-        const type = location.type
-
-        if(type === 1){ // 현재위치로 검색
-            if(getOS() === 'IOS'){
-                if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
-                    SDL_dispatchGetLocation()
-                }else{
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address);
-                    });     
-                }           
-            }else {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {     
-                        addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
-                            setLocationData(address)
-                        })
-        
-                    }, function(error) {
-                   
-                        console.error(error);
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address);
-                        });
-            
-                    }, {
-                        enableHighAccuracy: true,
-                        maximumAge: 0,
-                        timeout: 2000
-                    });
-                }else{             
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address);
-                    });
-                }
-            }
-        }else if (type === 2){ // 주소로 검색
-            const data = location.data
-            console.log('data',data)
-            addressSearchByName(data.address,(address) => {
-                setLocationData(address)
-            })
-            
-        }
+        const type = location.type;
+        gpsNavigator(type);
 
         return () =>{
         window.removeEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
         }
     },[])
 
+    //gps 현재 위치 
+    const gpsNavigator = (type) => {
+        if(type === 1){ // 현재위치로 검색
+            //애플만
+            if(getOS() === 'IOS'){
+                //앱 브리지 연결
+                if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
+                    SDL_dispatchGetLocation();
+                }else{
+                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                        setLocationData(address);
+                        SetConverseGpsButtonFg(!converseGpsButtonFg);
+                    });   
+                }           
+            }else {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {   
+                        //web에서 위치 정보찾기    
+                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                            setLocationData(address);
+                            SetConverseGpsButtonFg(!converseGpsButtonFg);
+                        });
+                    }, function(error) {
+                        console.error(error);
+                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                            setLocationData(address);
+                            SetConverseGpsButtonFg(!converseGpsButtonFg);
+                        });   
+                    }, {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 2000
+                    });
+                }else{                  
+                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                        setLocationData(address);
+                        SetConverseGpsButtonFg(!converseGpsButtonFg);
+                    });                
+                }
+            }
+        }else if (type === 2){ // 주소로 검색
+            const data = location.data
+            console.log('data',data)
+            addressSearchByName(data.address,(address) => {
+                setLocationData(address);
+                SetConverseGpsButtonFg(!converseGpsButtonFg);
+            }) 
+        }
+    };
+
     // 이벤트 헨들러
     const onClickBackBtn = (e) => {
         e.preventDefault();
-
         dispatch({type: REDUCER_ACTION.HISTORY_BACK})
     };
 
-    // 이벤트 핸들러
+    // 이벤트 핸들러 ()
     const onChangeCenterListener = (data) => {
         addressSearchByCoords(data.getLat(), data.getLng(),(address)=>{
-            setLocationData(address)
+            setLocationData(address);
         })
     }
 
@@ -99,11 +109,13 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=>{
-                setLocationData(address)
+                setLocationData(address);
+                SetConverseGpsButtonFg(!converseGpsButtonFg);
             })
         }else{
             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
                 setLocationData(address);
+                SetConverseGpsButtonFg(!converseGpsButtonFg);
             });
         }
         
@@ -125,7 +137,7 @@ export default ( {history, location} ) => {
                     </div>
                 </div>
                 <div id="container">
-                    <AddressSettingSection history={history} defaultAddress={locationData} onChangeCenterListener={onChangeCenterListener} from = {location.state.from}/>
+                    <AddressSettingSection history={history} converseGpsButtonFg={converseGpsButtonFg} defaultAddress={locationData} callback={gpsNavigator} onChangeCenterListener={onChangeCenterListener} from = {location.state.from}/>
                 </div>
             </div>
         </>
@@ -137,7 +149,7 @@ export default ( {history, location} ) => {
  *  -> 상세주소
  * @param {*} param0 
  */
-const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,from})=>{
+const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, callback, onChangeCenterListener,from})=>{
 
     // console.log('AddressSettingSection defaultAddress: ', defaultAddress)
 
@@ -148,7 +160,9 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
     /** 
      * hook
      */
-    const [coords, setCoords] = useState({lat : defaultAddress.y, lng : defaultAddress.x})
+    let defaultLat = defaultAddress.y;
+    let defaultLng = defaultAddress.x;
+    
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
 
@@ -161,14 +175,14 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         let container = document.getElementById("myMap");
 
         let options = {
-            center: new kakao.maps.LatLng(coords.lat, coords.lng),
+            center: new kakao.maps.LatLng(defaultLat, defaultLng),
             level: 3
         };
         let map = new window.kakao.maps.Map(container, options);
         let markerPosition;
         let marker;
 
-        markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng); 
+        markerPosition = new kakao.maps.LatLng(defaultLat, defaultLng); 
 
         marker = new kakao.maps.Marker({
             position: markerPosition
@@ -219,9 +233,8 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
         })
 
-    }, [])
+    }, [converseGpsButtonFg]);
 
-    
     // 이벤트 핸들러
     const handleBtnClick = () => {
         const detailAddress = inputRef.current.value
@@ -236,11 +249,25 @@ const AddressSettingSection = ({history, defaultAddress, onChangeCenterListener,
         history.replace(from)
     }
 
+    // 이벤트 핸들러 (내 위치)
+    const handlechangeMarkerClinck = (e) => {
+        //주소 바뀔때 들어왔을때만
+        callback(1);      
+    };
+
     return (
         <>
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" >지도 영역</div>
+                    <div className={styles.category}>
+                        <ul>
+                            <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
+                                <img src = {gpsImage}></img>
+                                <p>내위치</p> 
+                            </li>
+                        </ul>
+                    </div>
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
