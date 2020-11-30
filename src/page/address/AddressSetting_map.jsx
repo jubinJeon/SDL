@@ -20,7 +20,7 @@ export default ( {history, location} ) => {
      */
     const {dispatch,data} = useContext(SDLContext);
     const [locationData, setLocationData] = useState(null);
-    const [converseGpsButtonFg, SetConverseGpsButtonFg] = useState(false);
+    const [converseGpsButtonFg, setConverseGpsButtonFg] = useState(false);
 
     /** 
      * hook
@@ -46,23 +46,23 @@ export default ( {history, location} ) => {
                     SDL_dispatchGetLocation();
                 }else{
                     addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address);
-                        SetConverseGpsButtonFg(!converseGpsButtonFg);
+                        setConverseGpsButtonFg(!converseGpsButtonFg);
+                        setLocationData(address);                     
                     });   
                 }           
             }else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {   
                         //web에서 위치 정보찾기    
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address);
-                            SetConverseGpsButtonFg(!converseGpsButtonFg);
+                        addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
+                            setConverseGpsButtonFg(!converseGpsButtonFg);
+                            setLocationData(address);     
                         });
                     }, function(error) {
                         console.error(error);
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setLocationData(address);
-                            SetConverseGpsButtonFg(!converseGpsButtonFg);
+                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                            setConverseGpsButtonFg(!converseGpsButtonFg);
+                            setLocationData(address);    
                         });   
                     }, {
                         enableHighAccuracy: true,
@@ -70,9 +70,9 @@ export default ( {history, location} ) => {
                         timeout: 2000
                     });
                 }else{                  
-                    addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                        setLocationData(address);
-                        SetConverseGpsButtonFg(!converseGpsButtonFg);
+                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                        setConverseGpsButtonFg(!converseGpsButtonFg);
+                        setLocationData(address);    
                     });                
                 }
             }
@@ -80,8 +80,8 @@ export default ( {history, location} ) => {
             const data = location.data
             console.log('data',data)
             addressSearchByName(data.address,(address) => {
-                setLocationData(address);
-                SetConverseGpsButtonFg(!converseGpsButtonFg);
+                setConverseGpsButtonFg(!converseGpsButtonFg);
+                setLocationData(address);    
             }) 
         }
     };
@@ -109,13 +109,13 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=>{
-                setLocationData(address);
-                SetConverseGpsButtonFg(!converseGpsButtonFg);
+                setConverseGpsButtonFg(!converseGpsButtonFg);
+                setLocationData(address);    
             })
         }else{
             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setLocationData(address);
-                SetConverseGpsButtonFg(!converseGpsButtonFg);
+                setConverseGpsButtonFg(!converseGpsButtonFg);
+                setLocationData(address);    
             });
         }
         
@@ -160,8 +160,10 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
     /** 
      * hook
      */
-    let defaultLat = defaultAddress.y;
-    let defaultLng = defaultAddress.x;
+    const [coords, setcoords] = useState({
+        lat:defaultAddress.y,
+        lng: defaultAddress.x
+    })
     
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
@@ -175,14 +177,14 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         let container = document.getElementById("myMap");
 
         let options = {
-            center: new kakao.maps.LatLng(defaultLat, defaultLng),
+            center: new kakao.maps.LatLng(coords.lat, coords.lng),
             level: 3
         };
         let map = new window.kakao.maps.Map(container, options);
         let markerPosition;
         let marker;
 
-        markerPosition = new kakao.maps.LatLng(defaultLat, defaultLng); 
+        markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng); 
 
         marker = new kakao.maps.Marker({
             position: markerPosition
@@ -232,6 +234,15 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
             
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
         })
+
+        return() => {
+            let container = document.getElementById("myMap");
+            let options = {
+                center: new kakao.maps.LatLng(0, 0),
+                level: 3
+            };
+            let map = new window.kakao.maps.Map(container, options);       
+        }
 
     }, [converseGpsButtonFg]);
 
