@@ -161,9 +161,10 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
      * hook
      */
     const [coords, setcoords] = useState({
-        lat:defaultAddress.y,
+        lat: defaultAddress.y,
         lng: defaultAddress.x
     })
+    const [button, setButton] = useState(true);
     
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
@@ -234,16 +235,6 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
             
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
         })
-
-        return() => {
-            let container = document.getElementById("myMap");
-            let options = {
-                center: new kakao.maps.LatLng(0, 0),
-                level: 3
-            };
-            let map = new window.kakao.maps.Map(container, options);       
-        }
-
     }, [converseGpsButtonFg]);
 
     // 이벤트 핸들러
@@ -260,10 +251,13 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         history.replace(from)
     }
 
-    // 이벤트 핸들러 (내 위치)
+    // 이벤트 핸들러 (내 위치) 너무 막누르면 카카오맵 뻗음
     const handlechangeMarkerClinck = (e) => {
+         e.stopPropagation();
         //주소 바뀔때 들어왔을때만
-        callback(1);      
+        setTimeout(()=>{
+            callback(1);   
+        }, 800)    
     };
 
     return (
