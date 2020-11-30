@@ -265,18 +265,23 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         }, 50);   
     };
 
+    const gpsButton =  
+        <div id = "gpsButton" className={styles.category}>
+            <ul>
+                <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
+                    <img src = {gpsImage}></img>
+                </li>
+            </ul>
+        </div>;
+
+
     return (
         <>
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" >지도 영역</div>
-                    <div className={styles.category}>
-                        <ul>
-                            <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
-                                <img src = {gpsImage}></img>
-                            </li>
-                        </ul>
-                    </div>
+                    {getOS() === 'IOS' ? null : gpsButton}
+                     
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>

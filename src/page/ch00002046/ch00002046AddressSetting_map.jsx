@@ -46,7 +46,6 @@ export default ( {history, location} ) => {
                 //앱 브리지 연결
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation();
-                    return;
                 }else{
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
@@ -262,10 +261,12 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
             })
         }
         return () => {
-            //주소 바뀔때 들어왔을때만
-            document.querySelector("#myMap > div:nth-child(3)").remove();
-            document.querySelector("#myMap > div:nth-child(2)").remove();
-            document.querySelector("#myMap > div:nth-child(1)").remove();
+            if (defaultLat !== 0 && defaultLng !== 0) {
+                //주소 바뀔때 들어왔을때만
+                document.querySelector("#myMap > div:nth-child(3)").remove();
+                document.querySelector("#myMap > div:nth-child(2)").remove();
+                document.querySelector("#myMap > div:nth-child(1)").remove();
+            }
         };
 
     }, [defaultAddress.converseGpsButtonFG]);
@@ -297,18 +298,21 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         }, 1000)     
     };
 
+    const gpsButton =  
+        <div id = "gpsButton" className={styles.category}>
+            <ul>
+                <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
+                    <img src = {gpsImage}></img>
+                </li>
+            </ul>
+        </div>;
+
     return (
         <>
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" >지도 영역</div> 
-                    <div className={styles.category}>
-                        <ul>
-                            <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
-                                <img src = {gpsImage}></img>
-                            </li>
-                        </ul>
-                    </div>
+                    {getOS() === 'IOS' ? null : gpsButton}
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
