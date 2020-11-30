@@ -260,6 +260,15 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
                 
                 // latlng2Addr( latlng.getLng(), latlng.getLat() )
             })
+
+            return() => {
+                let container = document.getElementById("myMap");
+                let options = {
+                    center: new kakao.maps.LatLng(0, 0),
+                    level: 3
+                };
+                let map = new window.kakao.maps.Map(container, options);    
+            }
         }
 
     }, [defaultAddress.converseGpsButtonFG]);
