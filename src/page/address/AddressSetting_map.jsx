@@ -164,7 +164,6 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         lat: defaultAddress.y,
         lng: defaultAddress.x
     })
-    const [button, setButton] = useState(true);
     
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
@@ -257,7 +256,7 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         //주소 바뀔때 들어왔을때만
         setTimeout(()=>{
             callback(1);   
-        }, 800)    
+        }, 1000);   
     };
 
     return (
