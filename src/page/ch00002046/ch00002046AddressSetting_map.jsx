@@ -312,7 +312,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" ></div> 
-                    {getOS() === 'IOS' ? null : gpsButton}
+                    {getOS() === 'IOS' ? gpsButton : gpsButton}
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
