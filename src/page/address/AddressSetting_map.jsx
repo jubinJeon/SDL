@@ -109,13 +109,31 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=>{
-                setConverseGpsButtonFg(!converseGpsButtonFg);
-                setLocationData(address);    
+                
+                if(getOS() === 'IOS'){
+                    // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                    setConverseGpsButtonFg(false);
+                    setConverseGpsButtonFg(true);
+                    setLocationData(address);    
+                }
+                else {
+                    setConverseGpsButtonFg(!converseGpsButtonFg);
+                    setLocationData(address);    
+                }
+                
             })
         }else{
             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setConverseGpsButtonFg(!converseGpsButtonFg);
-                setLocationData(address);    
+                if(getOS() === 'IOS'){
+                    // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                    setConverseGpsButtonFg(false);
+                    setConverseGpsButtonFg(true);
+                    setLocationData(address);    
+                }
+                else {
+                    setConverseGpsButtonFg(!converseGpsButtonFg);
+                    setLocationData(address);    
+                }   
             });
         }
         
@@ -280,7 +298,7 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" >지도 영역</div>
-                    {getOS() === 'IOS' ? null : gpsButton}
+                    {getOS() === 'IOS' ? gpsButton : gpsButton}
                      
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>

@@ -28,7 +28,7 @@ export const SDL_dispatchCloseApp = (data) => {
     if (JsonData === undefined) JsonData = '';
     if(window.appBridge){
         console.log('SDL_dispatchCloseApp')
-        window.appBridge.dispatch(DISPATH_CODE.CLOSE_APP,'');  
+        window.appBridge.dispatch(DISPATH_CODE.CLOSE_APP, JSON.stringify(JsonData));  
     }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
         console.log('SDL_dispatchCloseApp')
         window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.CLOSE_APP , data : JsonData }))
