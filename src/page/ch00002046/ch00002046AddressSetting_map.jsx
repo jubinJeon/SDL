@@ -135,17 +135,39 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=>{
-                setLocationData({
-                    address: address,
-                    converseGpsButtonFG: !locationData.converseGpsButtonFG
-                })
+                if(getOS() === 'IOS'){
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: true
+                    });
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: false
+                    });
+                }else{
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: !locationData.converseGpsButtonFG
+                    })
+                }
             })
         }else{
             addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                setLocationData({
-                    address: address,
-                    converseGpsButtonFG: !locationData.converseGpsButtonFG
-                });
+                if(getOS() === 'IOS'){
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: true
+                    });
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: false
+                    });
+                }else{
+                    setLocationData({
+                        address: address,
+                        converseGpsButtonFG: !locationData.converseGpsButtonFG
+                    });
+                }
             });   
         }
         
