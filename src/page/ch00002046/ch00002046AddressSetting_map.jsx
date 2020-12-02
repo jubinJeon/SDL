@@ -6,6 +6,7 @@ import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import {SDL_dispatchCloseApp, SDL_dispatchGetLocation} from '../../appBridge'
 import gpsImage from './image/gpsImg.jpg';
+import gpsHeaderImage from './image/headerGps.jpg';
 import * as ACTION from '../../common/ActionTypes'
 
 const styles = require('./AddressSetting_map.module.scss');
@@ -32,7 +33,7 @@ export default ( {history, location} ) => {
         window.addEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
 
         const type = location.type;
-        gpsNavigator(type, false);
+        gpsNavigator(type);
         
         return () =>{
         window.removeEventListener('SDL_dispatchGetLocation',dispatchGetLocationCallback, false)
@@ -40,7 +41,7 @@ export default ( {history, location} ) => {
     },[])
 
     //gps 현재 위치 
-    const gpsNavigator = (type, gpsButtonFg) => {
+    const gpsNavigator = (type) => {
         if(type === 1){ // 현재위치로 검색
             if(getOS() === 'IOS'){
                 //앱 브리지 연결
@@ -135,39 +136,25 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=>{
-                if(getOS() === 'IOS'){
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: true
-                    });
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: false
-                    });
-                }else{
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: !locationData.converseGpsButtonFG
-                    })
-                }
+                setLocationData({
+                    address: address,
+                    converseGpsButtonFG: true
+                });
+                setLocationData({
+                    address: address,
+                    converseGpsButtonFG: false
+                });
             })
         }else{
             addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                if(getOS() === 'IOS'){
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: true
-                    });
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: false
-                    });
-                }else{
-                    setLocationData({
-                        address: address,
-                        converseGpsButtonFG: !locationData.converseGpsButtonFG
-                    });
-                }
+                setLocationData({
+                    address: address,
+                    converseGpsButtonFG: true
+                });
+                setLocationData({
+                    address: address,
+                    converseGpsButtonFG: false
+                });
             });   
         }
         
@@ -220,6 +207,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         //다 그리고 해야함
         if (defaultLat !== 0 && defaultLng !== 0) {
 
+            //카카오 맵 그리기
             let latlng = new kakao.maps.LatLng();
             let container = document.getElementById("myMap");
 
@@ -232,7 +220,6 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
             let marker;
 
             markerPosition = new kakao.maps.LatLng(defaultLat, defaultLng); 
-
             marker = new kakao.maps.Marker({
                 position: markerPosition
             });
@@ -246,39 +233,28 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
 
             // center changed시 마커 위치 함께 조정
             kakao.maps.event.addListener(map, 'center_changed', function(mouseEvent) {
-
                 infowindow.close()
-
                 marker.setPosition(map.getCenter())
-
                 infowindow.open(map, marker);
             })
             
             // map 확대 수준이 변경되면 좌표로 현재 주소 표시
             kakao.maps.event.addListener(map, 'zoom_changed', function() {
-
                 infowindow.open(map, marker);
-
                 // 마커의 위치 가져오기
-                latlng = map.getCenter();
-            
+                latlng = map.getCenter();        
                 inputRef.current.value = ''
-                onChangeCenterListener(latlng);
-                
+                onChangeCenterListener(latlng);            
                 // latlng2Addr( latlng.getLng(), latlng.getLat() )
             })
 
             // map drag end시 좌표로 현재 주소 표시
             kakao.maps.event.addListener(map, 'dragend', function() {
-
                 infowindow.open(map, marker);
-
                 // 마커의 위치 가져오기
-                latlng = map.getCenter();
-            
+                latlng = map.getCenter();         
                 inputRef.current.value = ''
-                onChangeCenterListener(latlng);
-                
+                onChangeCenterListener(latlng);              
                 // latlng2Addr( latlng.getLng(), latlng.getLat() )
             })
         }
@@ -293,7 +269,7 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
 
     }, [defaultAddress.converseGpsButtonFG]);
   
-    // 이벤트 핸들러
+    // 이벤트 핸들러 (완료버튼 클릭)
     const handleBtnClick = () => {
         const detailAddress = inputRef.current.value
         const addressData = {...defaultAddress.address, address_detail : detailAddress}
@@ -301,32 +277,37 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         pushDefaultAddress(addressData,'KAKAO_API')
         pushSearchAddress(addressData)
 
+        // 주소 앱 보내기
+        let jsonAddressData = {
+            defaultAddress : addressData,
+            searchAddress : addressData
+        };
+        //앱종료
+        SDL_dispatchCloseApp(jsonAddressData);
+
         if(data.channel.channelUIType === 'C'){
             dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
         }
-       let jsonAddressData = {
-        defaultAddress : addressData,
-        searchAddress : addressData
-       };
-       //앱종료
-       SDL_dispatchCloseApp(jsonAddressData);
     }
 
     // 이벤트 핸들러 (내 위치)
     const handlechangeMarkerClinck = (e) => {
         //주소 바뀔때 들어왔을때만
         setTimeout(()=>{
-            callback(1, true);   
+            callback(1);   
         }, 50)     
     };
 
+    // Component GPS IMAGE
     const gpsButton =  
         <div id = "gpsButton" className={styles.category}>
-            <ul>
-                <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
-                    <img src = {gpsImage}></img>
-                </li>
-            </ul>
+            <img src={gpsImage} onClick={handlechangeMarkerClinck}></img>
+        </div>;
+
+    // Component image 
+    const gpsHeaderImageComponent = 
+        <div id = "gpsHeaderImage" className={styles.headerGpsImage}>
+            <img src = {gpsHeaderImage}></img>
         </div>;
 
     return (
@@ -334,7 +315,11 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
             <div className="">
                 <div className="mapSearch">
                     <div className="mapArea" id="myMap" ></div> 
-                    {getOS() === 'IOS' ? gpsButton : gpsButton}
+                     {/**gps KAKAO map */}
+                     <div className="mapArea" id="myMap" ></div>
+                    {gpsHeaderImageComponent}
+                    {gpsButton}         
+                    {/**하단 컴포넌트*/}
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>

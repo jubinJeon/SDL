@@ -12,7 +12,8 @@ export const DISPATH_CODE = {
     SAVE_COOKIE : 800,
     CLEAR_COOKIE : 900,
     GET_LOCATION : 1000,
-    SHARED : 150
+    SHARED : 150,
+    COMPLETE_ADDRESS : 160   // AddressSetting_map (완료 클릭 시)
 }
 
 //1: 휴대폰본인인증(회원가입)
@@ -150,6 +151,21 @@ export const SDL_dispatchShared = (appLinkUrl) => {
     }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
         console.log('SDL_dispatchGetLocation')
         window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.SHARED , data : {appLinkUrl : appLinkUrl} }))
+    }
+}
+
+/**
+ * NEW 주소완료 클릭시 앱 보내기
+ * 데이터 JSON 
+ * @param {} jsonAddress {defaultAddress, serachAddress}
+ */
+export const SDL_dispatchCompleteAddress = (data) => {
+    if(window.appBridge){
+        console.log('SDL_dispatchCompleteAddress')
+        window.appBridge.dispatch(DISPATH_CODE.COMPLETE_ADDRESS, JSON.stringify(data));  
+    }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
+        console.log('SDL_dispatchCompleteAddress')
+        window.webkit.messageHandlers.dispatch.postMessage(JSON.stringify({code: DISPATH_CODE.COMPLETE_ADDRESS , data : data }))
     }
 }
 
