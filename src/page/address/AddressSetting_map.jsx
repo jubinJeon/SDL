@@ -49,13 +49,13 @@ export default ( {history, location} ) => {
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
                         addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address);  
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                
                         });   
                     }else{
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address);  
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                                      
                         });   
                     }
                 }           
@@ -64,21 +64,21 @@ export default ( {history, location} ) => {
                     navigator.geolocation.getCurrentPosition(function(position) {   
                         //web에서 위치 정보찾기    
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);     
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                            
                         });
                     }, function(error) {
                         console.error(error);     
                         //모범생 채널일 경우                  
                         if(data.channel.channelCode === 'CH00002046'){
                             addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                                setConverseGpsButtonFg(!converseGpsButtonFg);
-                                setLocationData(address);                     
+                                setLocationData(address); 
+                                setConverseGpsButtonFg(!converseGpsButtonFg);               
                             });   
                         }else{
                             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                                setConverseGpsButtonFg(!converseGpsButtonFg);
-                                setLocationData(address);    
+                                setLocationData(address); 
+                                setConverseGpsButtonFg(!converseGpsButtonFg);      
                             });   
                         }
                     }, {
@@ -90,13 +90,13 @@ export default ( {history, location} ) => {
                      //모범생 채널일 경우 
                      if(data.channel.channelCode === 'CH00002046'){
                         addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                      
                         });   
                     }else {      
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);    
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);    
                         });       
                     }
                 }
@@ -105,8 +105,8 @@ export default ( {history, location} ) => {
             const data = location.data
             console.log('data',data)
             addressSearchByName(data.address,(address) => {
-                setConverseGpsButtonFg(!converseGpsButtonFg);
-                setLocationData(address);    
+                setLocationData(address); 
+                setConverseGpsButtonFg(!converseGpsButtonFg);    
             }) 
         }
     };
@@ -133,26 +133,26 @@ export default ( {history, location} ) => {
 
         if(code){
             addressSearchByCoords(lat, lng,(address)=> {
-                // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
-                setConverseGpsButtonFg(false);
-                setConverseGpsButtonFg(true);
-                setLocationData(address);                  
+                setLocationData(address);  
+                 // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                 setConverseGpsButtonFg(false);
+                 setConverseGpsButtonFg(true);                
             })
         }else{
             if(data.channel.channelCode === 'CH00002046'){
                 addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{                 
+                    setLocationData(address); 
                     // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
                     setConverseGpsButtonFg(false);
-                    setConverseGpsButtonFg(true);
-                    setLocationData(address);    
+                    setConverseGpsButtonFg(true);   
                 });
 
             }else{
                 addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                    setLocationData(address);  
                     // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
                     setConverseGpsButtonFg(false);
-                    setConverseGpsButtonFg(true);
-                    setLocationData(address);    
+                    setConverseGpsButtonFg(true);  
                 });
             }
         }
