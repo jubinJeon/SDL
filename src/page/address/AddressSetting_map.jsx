@@ -4,8 +4,9 @@ import React, { useEffect, useState, useRef,useContext } from 'react';
 import { pushDefaultAddress, pushSearchAddress,getOS,addressSearchByCoords,addressSearchByName } from '../../util/Utils';
 import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
-import {SDL_dispatchGetLocation} from '../../appBridge'
+import {SDL_dispatchGetLocation, SDL_dispatchCompleteAddress} from '../../appBridge'
 import gpsImage from './image/gpsImg.jpg';
+import gpsHeaderImage from './image/headerGps.jpg';
 
 const styles = require('./AddressSetting_map.module.scss');
 
@@ -48,37 +49,36 @@ export default ( {history, location} ) => {
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
                         addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address);  
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                
                         });   
                     }else{
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address);  
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                                      
                         });   
                     }
-
                 }           
             }else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {   
                         //web에서 위치 정보찾기    
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);     
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                            
                         });
                     }, function(error) {
-                        console.error(error);
-                        
+                        console.error(error);     
+                        //모범생 채널일 경우                  
                         if(data.channel.channelCode === 'CH00002046'){
                             addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                                setConverseGpsButtonFg(!converseGpsButtonFg);
-                                setLocationData(address);                     
+                                setLocationData(address); 
+                                setConverseGpsButtonFg(!converseGpsButtonFg);               
                             });   
                         }else{
                             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                                setConverseGpsButtonFg(!converseGpsButtonFg);
-                                setLocationData(address);    
+                                setLocationData(address); 
+                                setConverseGpsButtonFg(!converseGpsButtonFg);      
                             });   
                         }
                     }, {
@@ -86,17 +86,18 @@ export default ( {history, location} ) => {
                         maximumAge: 0,
                         timeout: 2000
                     });
-                }else{                  
-                    if(data.channel.channelCode === 'CH00002046'){
+                }else{      
+                     //모범생 채널일 경우 
+                     if(data.channel.channelCode === 'CH00002046'){
                         addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);                     
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);                      
                         });   
-                    }else{
+                    }else {      
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setConverseGpsButtonFg(!converseGpsButtonFg);
-                            setLocationData(address);    
-                        });                
+                            setLocationData(address); 
+                            setConverseGpsButtonFg(!converseGpsButtonFg);    
+                        });       
                     }
                 }
             }
@@ -104,25 +105,24 @@ export default ( {history, location} ) => {
             const data = location.data
             console.log('data',data)
             addressSearchByName(data.address,(address) => {
-                setConverseGpsButtonFg(!converseGpsButtonFg);
-                setLocationData(address);    
+                setLocationData(address); 
+                setConverseGpsButtonFg(!converseGpsButtonFg);    
             }) 
         }
     };
 
-    // 이벤트 헨들러
+    // 이벤트 헨들러 (뒤로 버튼)
     const onClickBackBtn = (e) => {
         e.preventDefault();
         dispatch({type: REDUCER_ACTION.HISTORY_BACK})
     };
 
-    // 이벤트 핸들러 ()
+    // 이벤트 핸들러 ( 카카오 확대, 움직일때 등 이벤트)
     const onChangeCenterListener = (data) => {
         addressSearchByCoords(data.getLat(), data.getLng(),(address)=>{
             setLocationData(address);
         })
     }
-
 
     // 이벤트 핸들러
     const dispatchGetLocationCallback = (event) => {
@@ -132,52 +132,29 @@ export default ( {history, location} ) => {
         const lng = event.detail.longitude
 
         if(code){
-            addressSearchByCoords(lat, lng,(address)=>{
-                
-                if(getOS() === 'IOS'){
-                    // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
-                    setConverseGpsButtonFg(false);
-                    setConverseGpsButtonFg(true);
-                    setLocationData(address);    
-                }
-                else {
-                    setConverseGpsButtonFg(!converseGpsButtonFg);
-                    setLocationData(address);    
-                }
-                
+            addressSearchByCoords(lat, lng,(address)=> {
+                setLocationData(address);  
+                 // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                 setConverseGpsButtonFg(false);
+                 setConverseGpsButtonFg(true);                
             })
         }else{
-
             if(data.channel.channelCode === 'CH00002046'){
-                addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
-                    if(getOS() === 'IOS'){
-                        // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
-                        setConverseGpsButtonFg(false);
-                        setConverseGpsButtonFg(true);
-                        setLocationData(address);    
-                    }
-                    else {
-                        setConverseGpsButtonFg(!converseGpsButtonFg);
-                        setLocationData(address);    
-                    }   
+                addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{                 
+                    setLocationData(address); 
+                    // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                    setConverseGpsButtonFg(false);
+                    setConverseGpsButtonFg(true);   
                 });
 
             }else{
-
                 addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                    if(getOS() === 'IOS'){
-                        // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
-                        setConverseGpsButtonFg(false);
-                        setConverseGpsButtonFg(true);
-                        setLocationData(address);    
-                    }
-                    else {
-                        setConverseGpsButtonFg(!converseGpsButtonFg);
-                        setLocationData(address);    
-                    }   
+                    setLocationData(address);  
+                    // TODO: iOS인 경우 임시조치함. 향후 수정 필요 
+                    setConverseGpsButtonFg(false);
+                    setConverseGpsButtonFg(true);  
                 });
             }
-
         }
         
     }
@@ -215,16 +192,13 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
     // console.log('AddressSettingSection defaultAddress: ', defaultAddress)
 
     const {dispatch,data} = useContext(SDLContext);
-
-    const inputRef = useRef()
+    const inputRef = useRef();
 
     /** 
      * hook
      */
-    const [coords, setcoords] = useState({
-        lat: defaultAddress.y,
-        lng: defaultAddress.x
-    })
+    let lat = defaultAddress.y;
+    let lng = defaultAddress.x;
     
     const address_name = defaultAddress.address.address_name;
     const road_address_name = defaultAddress.road_address !== null ? defaultAddress.road_address.address_name : '';
@@ -233,20 +207,18 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
      * hook
      */
     useEffect(()=>{
-
+        // 카카오 맵 그리기
         let latlng = new kakao.maps.LatLng();
         let container = document.getElementById("myMap");
-
         let options = {
-            center: new kakao.maps.LatLng(coords.lat, coords.lng),
+            center: new kakao.maps.LatLng(lat, lng),
             level: 3
         };
         let map = new window.kakao.maps.Map(container, options);
         let markerPosition;
         let marker;
 
-        markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng); 
-
+        markerPosition = new kakao.maps.LatLng(lat, lng); 
         marker = new kakao.maps.Marker({
             position: markerPosition
         });
@@ -260,65 +232,62 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
 
         // center changed시 마커 위치 함께 조정
         kakao.maps.event.addListener(map, 'center_changed', function(mouseEvent) {
-
             infowindow.close()
-
             marker.setPosition(map.getCenter())
-
             infowindow.open(map, marker);
         })
         
         // map 확대 수준이 변경되면 좌표로 현재 주소 표시
         kakao.maps.event.addListener(map, 'zoom_changed', function() {
-
             infowindow.open(map, marker);
-
             // 마커의 위치 가져오기
-            latlng = map.getCenter();
-        
+            latlng = map.getCenter();   
             inputRef.current.value = ''
-            onChangeCenterListener(latlng);
-            
+            onChangeCenterListener(latlng);   
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
         })
 
         // map drag end시 좌표로 현재 주소 표시
         kakao.maps.event.addListener(map, 'dragend', function() {
-
             infowindow.open(map, marker);
-
             // 마커의 위치 가져오기
-            latlng = map.getCenter();
-           
+            latlng = map.getCenter();      
             inputRef.current.value = ''
-            onChangeCenterListener(latlng);
-            
+            onChangeCenterListener(latlng);   
             // latlng2Addr( latlng.getLng(), latlng.getLat() )
         });
 
         return () => {
-            //주소 바뀔때 들어왔을때만
+            //카카오 맵 계속 쌓이기 때문에 삭제
             document.querySelector("#myMap > div:nth-child(3)").remove();
             document.querySelector("#myMap > div:nth-child(2)").remove();
             document.querySelector("#myMap > div:nth-child(1)").remove();
         }
     }, [converseGpsButtonFg]);
 
-    // 이벤트 핸들러
+    // 이벤트 핸들러 (완료버튼)
     const handleBtnClick = () => {
-        const detailAddress = inputRef.current.value
-        const addressData = {...defaultAddress, address_detail : detailAddress}
+        const detailAddress = inputRef.current.value;
+        const addressData = {...defaultAddress, address_detail : detailAddress};
 
-        pushDefaultAddress(addressData,'KAKAO_API')
-        pushSearchAddress(addressData)
+        pushDefaultAddress(addressData,'KAKAO_API');
+        pushSearchAddress(addressData);
 
+        // 주소 
+        let jsonAddressData = {
+            defaultAddress : addressData,
+            searchAddress : addressData
+        };
+        // 추가 앱 보내기
+        SDL_dispatchCompleteAddress(jsonAddressData);
         if(data.channel.channelUIType === 'C'){
             dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
         }
-        history.replace(from)
+     
+        history.replace(from);
     }
 
-    // 이벤트 핸들러 (내 위치) 너무 막누르면 카카오맵 뻗음
+    // 이벤트 핸들러 (내 위치 GPS) 
     const handlechangeMarkerClinck = (e) => {
          e.stopPropagation();
         setTimeout(()=>{
@@ -326,23 +295,27 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
         }, 50);   
     };
 
+    // Component GPS IMAGE
     const gpsButton =  
         <div id = "gpsButton" className={styles.category}>
-            <ul>
-                <li id="coffeeMenu" onClick={handlechangeMarkerClinck}>
-                    <img src = {gpsImage}></img>
-                </li>
-            </ul>
+            <img src={gpsImage} onClick={handlechangeMarkerClinck}></img>
         </div>;
 
+    // Component image 
+    const gpsHeaderImageComponent = 
+        <div id = "gpsHeaderImage" className={styles.headerGpsImage}>
+            <img src = {gpsHeaderImage}></img>
+        </div>;
 
     return (
         <>
             <div className="">
                 <div className="mapSearch">
-                    <div className="mapArea" id="myMap" >지도 영역</div>
-                    {getOS() === 'IOS' ? gpsButton : gpsButton}
-                     
+                    {/**gps KAKAO map */}
+                    <div className="mapArea" id="myMap" ></div>
+                    {gpsHeaderImageComponent}
+                    {gpsButton}         
+                    {/**하단 컴포넌트*/}
                     <div className="mapAddress">
                         <p className="addressMain">{address_name}</p>
                         <p className="addressDetail">[도로명] {road_address_name}</p>
