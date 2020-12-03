@@ -18,7 +18,7 @@ import {REDUCER_ACTION} from '../../../context/SDLReducer'
 const Stores = ({ history }) => {
     
     const [locationData, setLocationData] = useState(null);
-
+    const {dispatch,data} = useContext(SDLContext);
     const dispatchGetLocationCallback = (event) => {
         console.log('dispatchGetLocationCallback', event)
         const code = event.detail.code
@@ -55,13 +55,13 @@ const Stores = ({ history }) => {
 
         if(storedDefaultAddress !== null && Object.keys(storedDefaultAddress).length !== 0){
 
-            setLocationData(storedDefaultAddress)
+            setLocationData(storedDefaultAddress);
 
         }else{
             if(getOS() === 'IOS'){
 
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
-                    SDL_dispatchGetLocation()
+                    SDL_dispatchGetLocation();
                 }else{
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
@@ -71,8 +71,8 @@ const Stores = ({ history }) => {
                         });   
                     }else{
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address)
-                            pushDefaultAddress(address,'DEFAULT')                                         
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');
                         });   
                     }
                 }           
@@ -80,8 +80,8 @@ const Stores = ({ history }) => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
-                            setLocationData(address)
-                            pushDefaultAddress(address)
+                            setLocationData(address);
+                            pushDefaultAddress(address);
                         })
                     }, function(error) {
                         console.error(error);
@@ -93,8 +93,8 @@ const Stores = ({ history }) => {
                             });   
                         }else{
                             addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                                setLocationData(address)
-                                pushDefaultAddress(address,'DEFAULT')                                         
+                                setLocationData(address);
+                                pushDefaultAddress(address,'DEFAULT');
                             });   
                         }
                     }, {
@@ -111,8 +111,8 @@ const Stores = ({ history }) => {
                         });   
                     }else{
                         addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address)
-                            pushDefaultAddress(address,'DEFAULT')                                         
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');
                         });   
                     }
                 }
