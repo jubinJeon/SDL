@@ -231,9 +231,6 @@ export const getOS = () => {
   return 'WEB'
 }
 
-
-
-
 /**
  * 로컬스토리지에 장바구니 아이템을 반환한다.
  */
@@ -393,12 +390,6 @@ export const removeShowScreenDataAll = () => {
 }
 
 
-
-
-
-
-
-
 /**
  * 특수 문자 치환 함수
  * @param {*} str 
@@ -413,7 +404,8 @@ export const unescapehtmlcode = (str) => {
   .replace(/&#39;/gi, "'")
   .replace(/&#37;/gi, '%').replace(/&#40;/gi, '(').replace(/&#41;/gi, ')')
   .replace(/&#43;/gi, '+').replace(/&#47;/gi, '/').replace(/&#46;/gi, '.')
-  .replace(/&rarr;/gi, '->');
+  .replace(/&rarr;/gi, '->')
+  .replace(/&nbsp;/gi, '');
 }
 
 /**
