@@ -31,10 +31,18 @@ const Stores = ({ history }) => {
                 pushDefaultAddress(address,'iOS_LOCATION_SERVICE')
             })
         }else{
-            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setLocationData(address)
-                pushDefaultAddress(address,'DEFAULT')
-            })
+            //모범생 채널일 경우 
+            if(data.channel.channelCode === 'CH00002046'){
+                addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                    setLocationData(address);
+                    pushDefaultAddress(address,'DEFAULT');             
+                });   
+            }else{
+                addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                    setLocationData(address)
+                    pushDefaultAddress(address,'DEFAULT')                                         
+                });   
+            }
         }
     }
 
@@ -55,40 +63,58 @@ const Stores = ({ history }) => {
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation()
                 }else{
-
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address)
-                        pushDefaultAddress(address,'DEFAULT')
-                    })
+                    //모범생 채널일 경우 
+                    if(data.channel.channelCode === 'CH00002046'){
+                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');             
+                        });   
+                    }else{
+                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
+                        });   
+                    }
                 }           
             }else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
-        
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
                             setLocationData(address)
                             pushDefaultAddress(address)
                         })
-        
                     }, function(error) {
-                        
                         console.error(error);
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address)
-                            pushDefaultAddress(address,'DEFAULT')
-                        })
-            
+                        //모범생 채널일 경우 
+                        if(data.channel.channelCode === 'CH00002046'){
+                            addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                                setLocationData(address);
+                                pushDefaultAddress(address,'DEFAULT');             
+                            });   
+                        }else{
+                            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                                setLocationData(address)
+                                pushDefaultAddress(address,'DEFAULT')                                         
+                            });   
+                        }
                     }, {
                         enableHighAccuracy: true,
                         maximumAge: 0,
                         timeout: 2000
                     });
                 }else{
-                    
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address)
-                        pushDefaultAddress(address,'DEFAULT')
-                    })
+                    //모범생 채널일 경우 
+                    if(data.channel.channelCode === 'CH00002046'){
+                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');             
+                        });   
+                    }else{
+                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
+                        });   
+                    }
                 }
             }
         }
