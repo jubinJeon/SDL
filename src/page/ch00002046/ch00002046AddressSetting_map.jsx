@@ -50,7 +50,7 @@ export default ( {history, location} ) => {
                 }else{
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                             setLocationData({
                                 address: address,
                                 converseGpsButtonFG:!locationData.converseGpsButtonFG
@@ -73,7 +73,7 @@ export default ( {history, location} ) => {
                         console.error(error);
                         //모범생 채널일 경우 
                         if(data.channel.channelCode === 'CH00002046'){
-                            addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                            addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                                 setLocationData({
                                     address: address,
                                     converseGpsButtonFG:!locationData.converseGpsButtonFG
@@ -88,7 +88,7 @@ export default ( {history, location} ) => {
                 }else{                  
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                             setLocationData({
                                 address: address,
                                 converseGpsButtonFG:!locationData.converseGpsButtonFG
@@ -146,7 +146,7 @@ export default ( {history, location} ) => {
                 });
             })
         }else{
-            addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+            addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                 setLocationData({
                     address: address,
                     converseGpsButtonFG: true

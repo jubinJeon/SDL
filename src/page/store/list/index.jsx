@@ -18,7 +18,8 @@ import {REDUCER_ACTION} from '../../../context/SDLReducer'
 const Stores = ({ history }) => {
     
     const [locationData, setLocationData] = useState(null);
-    const {dispatch,data} = useContext(SDLContext);
+    const {data} = useContext(SDLContext);
+
     const dispatchGetLocationCallback = (event) => {
         console.log('dispatchGetLocationCallback', event)
         const code = event.detail.code
@@ -33,12 +34,12 @@ const Stores = ({ history }) => {
         }else{
             //모범생 채널일 경우 
             if(data.channel.channelCode === 'CH00002046'){
-                addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                     setLocationData(address);
                     pushDefaultAddress(address,'DEFAULT');             
                 });   
             }else{
-                addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
+                addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
                     setLocationData(address)
                     pushDefaultAddress(address,'DEFAULT')                                         
                 });   
@@ -65,14 +66,14 @@ const Stores = ({ history }) => {
                 }else{
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                             setLocationData(address);
                             pushDefaultAddress(address,'DEFAULT');             
                         });   
                     }else{
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address);
-                            pushDefaultAddress(address,'DEFAULT');
+                        addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
                         });   
                     }
                 }           
@@ -87,14 +88,14 @@ const Stores = ({ history }) => {
                         console.error(error);
                         //모범생 채널일 경우 
                         if(data.channel.channelCode === 'CH00002046'){
-                            addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                            addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                                 setLocationData(address);
                                 pushDefaultAddress(address,'DEFAULT');             
                             });   
                         }else{
-                            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                                setLocationData(address);
-                                pushDefaultAddress(address,'DEFAULT');
+                            addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                                setLocationData(address)
+                                pushDefaultAddress(address,'DEFAULT')                                         
                             });   
                         }
                     }, {
@@ -105,14 +106,14 @@ const Stores = ({ history }) => {
                 }else{
                     //모범생 채널일 경우 
                     if(data.channel.channelCode === 'CH00002046'){
-                        addressSearchByCoords(37.3406045599450, 127.939619279104,(address)=>{
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
                             setLocationData(address);
                             pushDefaultAddress(address,'DEFAULT');             
                         });   
                     }else{
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address);
-                            pushDefaultAddress(address,'DEFAULT');
+                        addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
                         });   
                     }
                 }

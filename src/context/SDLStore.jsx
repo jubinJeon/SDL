@@ -53,9 +53,24 @@ export const initState = {
     status : null,
     data : null,
   },
-  
   toScreen : null,
   mainLocation : null,
+  /**
+   * NEW 2020.12.04
+   * 위도, 경도 
+   */
+  location : {
+    //모범생 (위도,경도)
+    ch00002046 : {
+      longitude : 37.3406045599450,
+      Latitude : 127.939619279104
+    },
+    //슬배생 (위도,경도)
+    sdl : {
+      longitude : 37.5085848476582,
+      Latitude : 126.888897552736   
+    }
+  },
 }
 
 // SDL 데이터 저장소
