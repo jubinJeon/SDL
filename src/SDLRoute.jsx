@@ -186,6 +186,25 @@ const SDLRoute = ({component : ComponentToRender, computedMatch,...rest})=>{
                 history.replace(location.state.from);
             }
 
+            /**
+             * NEW 모범생 채널주소
+             * 추가 채널 (앱 연결)
+             */
+            else if (history.location.pathname === ACTION.LINK_CH00002046_ADDRESS){
+                data.history.action = '';
+                console.log("LINK_CH00002046_ADDRESS");
+                SDL_dispatchCloseApp();
+            }
+             /**
+             * NEW 모범생 채널주소
+             * 추가 채널 (앱 연결)
+             */
+            else if (history.location.pathname === ACTION.LINK_CH00002046_ADDRESSSetting_map){
+                data.history.action = '';
+                console.log("LINK_CH00002046_ADDRESSSetting_map");
+                history.replace(ACTION.LINK_CH00002046_ADDRESS);
+            }
+
             else {
                 data.history.action = ''
                 history.goBack()

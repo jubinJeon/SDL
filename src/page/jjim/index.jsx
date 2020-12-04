@@ -17,7 +17,7 @@ export default ({history}) => {
 
     const [locationData, setLocationData] = useState(null);
 
-    const {dispatch,data} = useContext(SDLContext)
+    const {data} = useContext(SDLContext)
 
     const dispatchGetLocationCallback = (event) => {
         console.log('dispatchGetLocationCallback', event)
@@ -31,12 +31,19 @@ export default ({history}) => {
                 pushDefaultAddress(address,'iOS_LOCATION_SERVICE')
             })
         }else{
-            addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                setLocationData(address)
-                pushDefaultAddress(address,'DEFAULT')
-            })
-        }
-        
+            //모범생 채널일 경우 
+            if(data.channel.channelCode === 'CH00002046'){
+                addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
+                    setLocationData(address);
+                    pushDefaultAddress(address,'DEFAULT');             
+                });   
+            }else{
+                addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                    setLocationData(address)
+                    pushDefaultAddress(address,'DEFAULT')                                         
+                });   
+            }
+        }     
     }
 
     useEffect(()=>{
@@ -56,40 +63,58 @@ export default ({history}) => {
                 if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dispatch){
                     SDL_dispatchGetLocation()
                 }else{
-
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address)
-                        pushDefaultAddress(address,'DEFAULT')
-                    })
+                    //모범생 채널일 경우 
+                    if(data.channel.channelCode === 'CH00002046'){
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');             
+                        });   
+                    }else{
+                        addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
+                        });   
+                    }
                 }           
             }else {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-        
+                    navigator.geolocation.getCurrentPosition(function(position) {  
                         addressSearchByCoords(position.coords.latitude,position.coords.longitude,(address)=>{
                             setLocationData(address)
                             pushDefaultAddress(address)
-                        })
-        
+                        })      
                     }, function(error) {
-                        
                         console.error(error);
-                        addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                            setLocationData(address)
-                            pushDefaultAddress(address,'DEFAULT')
-                        })
-            
+                        //모범생 채널일 경우 
+                        if(data.channel.channelCode === 'CH00002046'){
+                            addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
+                                setLocationData(address);
+                                pushDefaultAddress(address,'DEFAULT');             
+                            });   
+                        }else{
+                            addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                                setLocationData(address)
+                                pushDefaultAddress(address,'DEFAULT')                                         
+                            });   
+                        }
                     }, {
                         enableHighAccuracy: true,
                         maximumAge: 0,
                         timeout: 2000
                     });
                 }else{
-                    
-                    addressSearchByCoords(37.5085848476582, 126.888897552736,(address)=>{
-                        setLocationData(address)
-                        pushDefaultAddress(address,'DEFAULT')
-                    })
+                    //모범생 채널일 경우 
+                    if(data.channel.channelCode === 'CH00002046'){
+                        addressSearchByCoords(data.location.ch00002046.longitude, data.location.ch00002046.Latitude,(address)=>{
+                            setLocationData(address);
+                            pushDefaultAddress(address,'DEFAULT');             
+                        });   
+                    }else{
+                        addressSearchByCoords(data.location.sdl.longitude, data.location.sdl.Latitude,(address)=>{
+                            setLocationData(address)
+                            pushDefaultAddress(address,'DEFAULT')                                         
+                        });   
+                    }
                 }
             }
         }
@@ -306,7 +331,6 @@ const LikeMenu = ({defaultAddress, history}) => {
         </div>
     )
 }
-
 
 const DipMarketCmpnt = ({ market, changeCountRef, restYN }) => {
     
