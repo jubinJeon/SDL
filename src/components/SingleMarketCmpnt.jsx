@@ -68,11 +68,15 @@ const SingleMarketCmpnt = ({ market, restYN }) => {
                                 {
                                   Number(market.dlPrc3) !== 0
                                   ?
-                                  <span className="descLabel">배달팁 {numberFormat(market.dlPrc3)}원 ~ {numberFormat(market.dlPrc1)}원</span>
+                                  <span className="descLabel">배달팁 {numberFormat(market.dlPrc3)}원 ~ {numberFormat(calcDtlPrice(market.dlPrc1, market.maxDlTipTmPrc, market.maxDlTipRgnPrc))}원</span>
                                   :
                                   Number(market.dlPrc2) !== 0
                                   ?
-                                  <span className="descLabel">배달팁 {numberFormat(market.dlPrc2)}원 ~ {numberFormat(market.dlPrc1)}원</span>
+                                  <span className="descLabel">배달팁 {numberFormat(market.dlPrc2)}원 ~ {numberFormat(calcDtlPrice(market.dlPrc1, market.maxDlTipTmPrc, market.maxDlTipRgnPrc))}원</span>
+                                  :
+                                  ( Number(market.maxDlTipTmPrc) !== 0 || Number(market.maxDlTipRgnPrc) !== 0)
+                                  ?
+                                  <span className="descLabel">배달팁 {numberFormat(market.dlPrc1)}원 ~ {numberFormat(calcDtlPrice(market.dlPrc1, market.maxDlTipTmPrc, market.maxDlTipRgnPrc))}원</span>
                                   :
                                   <span className="descLabel">배달팁 {numberFormat(market.dlPrc1)}원</span>
                                 }    
@@ -103,6 +107,15 @@ const calcMinOderPrice = (cartData) => {
     const arr = [Number(dlMinOrdrPrc9icp),Number(dlMinOrdrPrc9ica),Number(dlMinOrdrPrc9icm)]
 
     return Math.max.apply(null, arr);
+}
+
+const calcDtlPrice = (dlPrc, maxDlTipTmPrc, maxDlTipRgnPrc) => {
+    let maxDlPrc = dlPrc;
+    if (maxDlTipTmPrc !== undefined && maxDlTipRgnPrc !== undefined ) {
+        maxDlPrc = Number(maxDlPrc) + Number(maxDlTipTmPrc) + Number(maxDlTipRgnPrc);
+    }
+
+    return maxDlPrc
 }
 
 export default SingleMarketCmpnt;
