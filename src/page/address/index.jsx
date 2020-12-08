@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { pullSearchAddress, pushDefaultAddress, removeSearchAddress } from '../../util/Utils'
 import {SDLContext} from '../../context/SDLStore'
 import {REDUCER_ACTION} from '../../context/SDLReducer'
+import {SDL_dispatchCompleteAddress} from '../../appBridge'
 
 /**
  *******MAIN*******
@@ -160,9 +161,18 @@ const SearchAddress = ({history}) => {
         {searchAddress.map((address)=> 
             <li key={address.key}>
                 <a onClick={()=> {
-                                pushDefaultAddress(address,'KAKAO_API')
-                                dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
-                                history.replace(location.state.from)
+                                pushDefaultAddress(address,'KAKAO_API');
+                                dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS});
+                                //모범생 채널일 경우 
+                                if(data.channel.channelCode === 'CH00002046'){
+                                    // 주소 
+                                    let jsonAddressData = {
+                                        defaultAddress : address,
+                                        searchAddress : address
+                                    };
+                                    SDL_dispatchCompleteAddress(jsonAddressData);
+                                }
+                                history.replace(location.state.from);
                                 }
                 }>
                     {address.address.address_name} { address.address_detail }
