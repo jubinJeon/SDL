@@ -66,11 +66,11 @@ const SingleMarketCmpnt = ({ market, restYN }) => {
                                 <span className="descLabel"> 최소주문 {numberFormat(calcMinOderPrice(market))}원
                                 </span>
                                 {
-                                  Number(market.dlPrc3) !== 0
+                                  market.dlPrc3 !== ""
                                   ?
                                   <span className="descLabel">배달팁 {numberFormat(market.dlPrc3)}원 ~ {numberFormat(calcDtlPrice(market.dlPrc1, market.maxDlTipTmPrc, market.maxDlTipRgnPrc))}원</span>
                                   :
-                                  Number(market.dlPrc2) !== 0
+                                  market.dlPrc2 !== ""
                                   ?
                                   <span className="descLabel">배달팁 {numberFormat(market.dlPrc2)}원 ~ {numberFormat(calcDtlPrice(market.dlPrc1, market.maxDlTipTmPrc, market.maxDlTipRgnPrc))}원</span>
                                   :
