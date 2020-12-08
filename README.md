@@ -45,6 +45,14 @@
 	c. FTP 통해 /kis/kisweb/smartorder/nweb/www 폴더 빌드 된 파일 전송<br />
      (단 전송전 원격지의 precached-manifest 파일과 static 폴더를 삭제후 전송)<br />
 	d. 배포 완료<br />
+	
+	=> 변경 deploy스크립트 추가
+	   방법 : 
+	   (개발) npm run deploy.dev
+	   (운영1) npm run deploy.prd1
+	   (운영2) npm run deploy.prd2
+	   
+	   
 
 
 
