@@ -51,7 +51,6 @@
 	   
 	   
 	   ```
-	   
 	   (개발) npm run deploy.dev
 	   (운영1) npm run deploy.prd1
 	   (운영2) npm run deploy.prd2
