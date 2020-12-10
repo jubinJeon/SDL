@@ -12,7 +12,7 @@ import FooterNavigation from '../../../components/FooterNavgation'
 
 const OrderHistory = ( {history} ) => {
     
-    const {dispatch} = useContext(SDLContext)
+    const {dispatch, data} = useContext(SDLContext)
 
     // 회원 여부
     const [isMember, setIsMember] = useState(false)
@@ -22,13 +22,13 @@ const OrderHistory = ( {history} ) => {
 
     const [filter, setFilter] = useState(2);
     const [state, refetch] = useAsync(API.orderHistory, [])
-    const {loading, error, data} = state
+    // const {loading, error, data} = state
     const [historyData, setHistoryData] = useState()
 
     useEffect(() =>  {
-        if( !loading && data ) {
+        if( !state.loading && state.data ) {
 
-            const result = data.data
+            const result = state.data.data
 
             // 회원 여부 조회(for 리뷰쓰기 show/hide)
             API.getMemberInfo()
@@ -89,7 +89,7 @@ const OrderHistory = ( {history} ) => {
     },[])
 
 
-    if (loading) return (
+    if (state.loading) return (
         <>
             <div className="">
                 <div className="stateWrap">
@@ -99,7 +99,7 @@ const OrderHistory = ( {history} ) => {
         </>
     )
 
-    if (error) return (
+    if (state.error) return (
         <div className="">
             <div className="stateWrap">
                 <div className="error">에러가 발생했습니다</div>
@@ -131,7 +131,7 @@ const OrderHistory = ( {history} ) => {
                                         ( (order.ordrKindCd.indexOf("9") !== -1 ? 0:1) === filter || 2 === filter) && /* order.canRvwYn === "Y" && */
                                         <React.Fragment key={order.ordrId}>
                                             <div className="orderInfoList typeResult">
-                                                <SingleHistoryComponent order={order} dispatch={dispatch} history={history} isMember={isMember} refetch={refetch}/>
+                                                <SingleHistoryComponent order={order} dispatch={dispatch} history={history} isMember={isMember} refetch={refetch} data={data}/>
                                             </div>
                                             <div className="sectionBlock" ></div>
                                         </React.Fragment>
@@ -203,7 +203,7 @@ const Header = ({reload}) => {
     )
 }
 
-const SingleHistoryComponent = ( {order, dispatch, history, isMember, refetch} ) => {
+const SingleHistoryComponent = ( {order, dispatch, history, isMember, refetch, data} ) => {
     // console.log(order)
 
     const titleColorSwitch = (status) => {
@@ -397,6 +397,13 @@ const SingleHistoryComponent = ( {order, dispatch, history, isMember, refetch} )
     }
 
     const bottomBtnSwitch = (status, history) => {
+        const mobum = '033-734-6666';
+        const selbea = '1599-3700';
+        let callnum = selbea;
+
+        if(data.channel.channelCode === 'CH00002046') {
+            callnum = mobum;
+        }
         const ordStusCd = parseInt(status)
 
         switch(ordStusCd) {
@@ -438,7 +445,7 @@ const SingleHistoryComponent = ( {order, dispatch, history, isMember, refetch} )
                                         type: REDUCER_ACTION.SHOW_ALERT, 
                                         payload : {data : {title: '' , desc : '고객님께서 주문하신 내역이 '+order.ordrCclNm+'(으)로 주문접수가'
                                         + ' 취소되었습니다. 불편을 드려 죄송합니다. 결제 취소가 정상적으로 되지 않았을 경우, '
-                                        +' 고객센터 1599-3700으로 연락을 요청드립니다.', code : 100},
+                                        +' 고객센터 '+callnum+'으로 연락을 요청드립니다.', code : 100},
                                         callback : () => {
                                           dispatch({type : REDUCER_ACTION.HIDE_ALERT})
                                         }
