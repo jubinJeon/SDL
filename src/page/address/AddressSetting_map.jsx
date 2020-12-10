@@ -278,8 +278,12 @@ const AddressSettingSection = ({history, converseGpsButtonFg, defaultAddress, ca
             defaultAddress : addressData,
             searchAddress : addressData
         };
-        // 추가 앱 보내기
-        SDL_dispatchCompleteAddress(jsonAddressData);
+
+        //모범생 채널일 경우 
+        if(data.channel.channelCode === 'CH00002046'){
+            SDL_dispatchCompleteAddress(jsonAddressData);
+        };
+        
         if(data.channel.channelUIType === 'C'){
             dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
         }

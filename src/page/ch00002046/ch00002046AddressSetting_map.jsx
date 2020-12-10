@@ -282,12 +282,13 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
             defaultAddress : addressData,
             searchAddress : addressData
         };
-        //앱종료
-        SDL_dispatchCloseApp(jsonAddressData);
-
+        
         if(data.channel.channelUIType === 'C'){
             dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
-        }
+        };
+
+        //앱종료
+        SDL_dispatchCloseApp(jsonAddressData);
     }
 
     // 이벤트 핸들러 (내 위치)
