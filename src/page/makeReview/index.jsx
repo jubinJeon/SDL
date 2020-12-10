@@ -79,47 +79,31 @@ export default ( {history, location}) => {
      
     // function (사진 첨부) 
     const readFile = (e) => {
-        var dupl = false;
-
-        const file = e.target.files[0]
-
-        // setting for parameter image
-        if(e.target.files.length > 0 && imgSrc.length > 0) {
-            imgSrc.map((img) => {
-                if(img.id == file.name) {
-                    dupl = true
-                    return
-                }
-            })
-        }
-
-        if(!dupl) {
+        if(e.target.files.length > 0) {
+            const file = e.target.files[0];
 
             Resizer.imageFileResizer(
-                e.target.files[0],
+                file,
                 600,
                 600,
                 'JPEG',
                 100,
                 0,
                 uri => {
-                    // console.log(uri)
                     setImgSrc( [...imgSrc, {id: file.name, name: file.name, data: uri} ] )
                 },
                 'base64')
             
             // setting for preview image 
             var reader = new FileReader()
-    
-            reader.onloadend = () => {
-                
-                    setPrev([...imgPreview, {id: file.name, file: reader.result}])
-            }
-            if(e.target.files.length > 0)
-                reader.readAsDataURL(e.target.files[0])
+            reader.readAsDataURL(e.target.files[0]);
+            
+            reader.onloadend = () => {                
+                setPrev([...imgPreview, {id: file.name, file: reader.result}]);
+            }                
         }
 
-        e.target.value = ''
+        e.target.value = '';
     }
 
     // 이벤트 헨들러 (뒤로가기)
