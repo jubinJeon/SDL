@@ -18,7 +18,9 @@ function withClearCache(Component) {
     const [isLatestBuildDate, setIsLatestBuildDate] = useState(false);
 
     useEffect(() => {
-      fetch("/meta.json")
+      console.log('### version checking!');
+
+      fetch(`/meta.json?${new Date().getTime()}`, {cache: 'no-cache'})
         .then((response) => response.json())
         .then((meta) => {
           const latestVersionDate = meta.buildDate;
@@ -28,26 +30,29 @@ function withClearCache(Component) {
             latestVersionDate,
             currentVersionDate
           );
+
           if (shouldForceRefresh) {
+            console.log('### version mismatch!');
             setIsLatestBuildDate(false);
             refreshCacheAndReload();
           } else {
+            console.log('### version match!');
             setIsLatestBuildDate(true);
           }
         });
     }, []);
 
     const refreshCacheAndReload = () => {
-      if (caches) {
+      if (window.caches) {
         // Service worker cache should be cleared with caches.delete()
-        caches.keys().then((names) => {
-          for (const name of names) {
-            caches.delete(name);
-          }
-        });
+        window.caches.keys().then(async (names) => {
+          await Promise.all(names.map(name => window.caches.delete(name)));        
+          window.location.reload();            
+        });        
+      } else {
+        // delete browser cache and hard reload
+        window.location.reload();
       }
-      // delete browser cache and hard reload
-      window.location.reload(true);
     };
 
     return (
