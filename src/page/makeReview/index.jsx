@@ -1,9 +1,6 @@
 import axios from 'axios'
 import React, {useEffect, useState, useRef, useContext} from 'react';
 import Resizer from 'react-image-file-resizer';
-
-import Alert from '../popup/Alert'
-
 import {REDUCER_ACTION} from '../../context/SDLReducer'
 import * as ACTION from '../../common/ActionTypes'
 import {unescapehtmlcode} from '../../util/Utils'
@@ -76,31 +73,51 @@ export default ( {history, location}) => {
     const toastCallback = (data) => {
         data.dispatch({type : 'TOAST', payload : {show : false }})
     }
-     
+
+    // 파일 아이디 생성
+    const guid = () => {
+        const s4 = () => {
+          return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
     // function (사진 첨부) 
     const readFile = (e) => {
         if(e.target.files.length > 0) {
             const file = e.target.files[0];
-
-            Resizer.imageFileResizer(
-                file,
-                600,
-                600,
-                'JPEG',
-                100,
-                0,
-                uri => {
-                    setImgSrc( [...imgSrc, {id: file.name, name: file.name, data: uri} ] )
-                },
-                'base64')
-            
-            // setting for preview image 
-            var reader = new FileReader()
-            reader.readAsDataURL(e.target.files[0]);
-            
-            reader.onloadend = () => {                
-                setPrev([...imgPreview, {id: file.name, file: reader.result}]);
-            }                
+            if(file) {
+                if(file.size === 0) {
+                    dispatch({
+                        type: REDUCER_ACTION.SHOW_ALERT, 
+                        payload : {
+                            data : {
+                                title: '카메라 사진첨부 미지원' , 
+                                desc : '카메라 사진 첨부를 지원하지 않는 휴대폰 입니다.\n휴대폰에 저장된 사진으로 첨부하세요.', 
+                                code : 100
+                            },
+                            callback : () => {
+                                dispatch({type : REDUCER_ACTION.HIDE_ALERT});
+                            }
+                        }
+                    });
+                } else {
+                    const fileId = guid();
+    
+                    Resizer.imageFileResizer(
+                        file, 
+                        600, 
+                        600, 
+                        'JPEG', 
+                        100, 0,
+                        uri => {
+                            setImgSrc([...imgSrc, {id: fileId, name: file.name, data: uri}]);
+                            setPrev([...imgPreview, {id: fileId, file: uri}]);  
+                        }, 
+                        'base64' 
+                    );
+                // }          
+            }
         }
 
         e.target.value = '';
@@ -143,15 +160,15 @@ export default ( {history, location}) => {
     }
 
     // 이벤트 헨들러 (리뷰 등록 
-    async function sendReview () {
-        
+    async function sendReview () {        
         axios.defaults.baseURL = process.env.REACT_APP_SDL_API_DOMAIN + '/api/v1'
-        
+        axios.defaults.headers['Pragma'] = 'no-cache';
+
         let config = {
             withCredentials : true,
             timeout: 10000,
             headers: {
-                // 'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/json',
                 "Accept": "*/*",
             }
         }
@@ -163,13 +180,10 @@ export default ( {history, location}) => {
         });
 
         const url = 'members/reviews?'
-
-        var files = []
+        let files = [];
         imgSrc.map((img) => {
             files.push( JSON.stringify({'name': img.name, 'data': img.data}) )
-        })
-
-        console.log(files)
+        });
 
         await axios.post(
             url,
@@ -182,7 +196,6 @@ export default ( {history, location}) => {
             config
         )
         .then((data) => {
-            // console.log(data)
             if(data.data.code == "1") {
                 history.replace({pathname: ACTION.LINK_ORDER_HISTORY})
             }
@@ -192,9 +205,7 @@ export default ( {history, location}) => {
             dispatch({type: 'TOAST', payload: {show : true, 
                         data: {msg: '처리에 실패하였습니다.', code : '', dispatch : dispatch},
                         callback : toastCallback}})
-            // console.log(err.response.data)
-            // console.log(err.response.status)
-        })
+        });
 
 
         // const formData = new FormData()
@@ -314,7 +325,7 @@ export default ( {history, location}) => {
                                     </div>
                                     <div className={attachable ? "addPhotoWrap" : "addPhotoWrap disable"}>
                                         <label className="btn icon detail addPhoto">
-                                            <input type='file' onChange={readFile}/>
+                                            <input type='file' onChange={readFile} accept="image/*" />
                                             <span className="label">사진첨부</span>
                                         </label>
                                         <ul className="phtoList" ref={photoRef}>

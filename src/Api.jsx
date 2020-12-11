@@ -9,6 +9,7 @@ import { objectOf, any, arrayOf } from 'prop-types';
 
 //URL
 axios.defaults.baseURL = process.env.REACT_APP_SDL_API_DOMAIN + '/api/v1'
+axios.defaults.headers['Pragma'] = 'no-cache';
 
 let config = {
     withCredentials : true,
@@ -24,7 +25,7 @@ axios.interceptors.request.use(function (config) {
     const token = localStorage.getItem('accessId');
     config.headers.Authorization =  token ? `Bearer ${token}` : '';
     return config;
-  });
+});
 
 
 //RESPONSE
