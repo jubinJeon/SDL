@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Swiper from 'react-id-swiper';
 
@@ -18,6 +18,17 @@ const MenuListComponent = (props) => {
     const menuActive = (e) =>{
         e.currentTarget.parentNode.classList.toggle("hide")
     }
+
+    //상세매장 메뉴 스크롤
+    useEffect(() => {
+        const scrollPos = localStorage.getItem("scrollPos");
+        if (scrollPos !== null) {                    
+            window.scrollTo(0, scrollPos);
+            localStorage.removeItem("scrollPos");
+        } else {
+            window.scrollTo(0,1);
+        }
+    })
 
     return (
         <>
@@ -88,6 +99,11 @@ const RepresentativeMenu = (props) => {
             API.menuDipdel(props.category.strId, props.storeCd, e.currentTarget.value)
     }
 
+    //스크롤 저장
+    const savescroll = () => {
+        localStorage.setItem("scrollPos", window.scrollY);
+    }
+
     return (
         <>
             <div className="listContent mainMenu swiper-container">
@@ -100,7 +116,7 @@ const RepresentativeMenu = (props) => {
                             {
                                 return (
                                     <div key={data.prdId} className="swiper-slide">
-                                        <Link to = {{
+                                        <Link onClick={savescroll} to = {{
                                             pathname:ACTION.LINK_ORDER_MENU,
                                             state: {
                                                 mainMenu : true,
@@ -162,6 +178,10 @@ const NomalMenu = (props) => {
         else
             API.menuDipdel(props.mainMenu.strId, props.storeCd, e.currentTarget.value)
     }
+
+    const savescroll = () => {
+        localStorage.setItem("scrollPos", window.scrollY);
+    }
     
     return (
         <>
@@ -171,7 +191,7 @@ const NomalMenu = (props) => {
                         props.mainMenu.detail.map((menu) => {
                             return(
                                 <li className={menu.prdSaleCd === "OS" ? "" : "soldOut"} key={menu.prdId}>
-                                    <Link to = {{
+                                    <Link onClick={savescroll} to = {{
                                         pathname:ACTION.LINK_ORDER_MENU,
                                         state: {
                                             mainMenu : props.mainMenuShow.indexOf(menu.prdId) >= 0 ? true : false,
