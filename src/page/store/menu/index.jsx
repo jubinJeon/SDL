@@ -232,6 +232,7 @@ const linkCart = (history, location, valueOption, totalCount, dispatch, resultDa
         pushCartData(data)
         changeShowToast(true)
         dispatch({type:REDUCER_ACTION.INIT_USER_ORDER_MENU})
+        localStorage.removeItem("scrollPos");
         history.goBack()
     }
 }

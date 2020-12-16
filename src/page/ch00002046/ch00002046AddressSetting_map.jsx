@@ -176,7 +176,7 @@ export default ( {history, location} ) => {
                     </div>
                 </div>
                 <div id="container">
-                    <AddressSettingSection history={history} defaultAddress={locationData} callback={gpsNavigator} onChangeCenterListener={onChangeCenterListener}/>
+                    <AddressSettingSection history={history} defaultAddress={locationData} callback={gpsNavigator} onChangeCenterListener={onChangeCenterListener} location={location}/>
                 </div>
             </div>
         </>
@@ -188,7 +188,7 @@ export default ( {history, location} ) => {
  *  -> 상세주소
  * @param {*} param0 
  */
-const AddressSettingSection = ({history, defaultAddress, callback, onChangeCenterListener})=>{
+const AddressSettingSection = ({history, defaultAddress, callback, onChangeCenterListener, location})=>{
 
     /** 
      * hook
@@ -286,6 +286,14 @@ const AddressSettingSection = ({history, defaultAddress, callback, onChangeCente
         if(data.channel.channelUIType === 'C'){
             dispatch({type:REDUCER_ACTION.SAVED_DELIVERY_ADDRESS})
         };
+
+        //검색으로 주소설정할 경우
+        if(location.type === 2){
+            const count = history.length
+            for(let i = 0; i < count-1; i++) {
+                SDL_dispatchCloseApp(jsonAddressData);
+            }
+        }
 
         //앱종료
         SDL_dispatchCloseApp(jsonAddressData);
