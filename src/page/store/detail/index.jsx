@@ -51,6 +51,7 @@ export default ({ history, location }) => {
     let cartData = pullCartData();
 
     if(cartData.showToast) {
+      localStorage.setItem('scrollPos2', localStorage.getItem('scrollPos'));
       dispatch({type : 'TOAST', payload : {show : true , data : {msg: '장바구니에 담겼습니다.', code : '', dispatch : dispatch} , callback : toastCallback}})
       changeShowToast(false)
     }

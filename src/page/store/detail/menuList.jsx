@@ -22,10 +22,16 @@ const MenuListComponent = (props) => {
     //상세매장 메뉴 스크롤
     useEffect(() => {
         const scrollPos = localStorage.getItem("scrollPos");
-        if (scrollPos !== null) {                    
+        const scrollPos2 = localStorage.getItem("scrollPos2");
+        if (scrollPos !== null) {
             window.scrollTo(0, scrollPos);
             localStorage.removeItem("scrollPos");
-        } else {
+        }
+        else if (scrollPos2 !== null) {
+            window.scrollTo(0, scrollPos2)
+            localStorage.removeItem("scrollPos2");
+        } 
+        else {
             window.scrollTo(0,1);
         }
     })
