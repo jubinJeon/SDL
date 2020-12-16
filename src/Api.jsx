@@ -624,7 +624,7 @@ export async function postMemberReview(ordrId, rvwPoint, rvwMsg, files) {
 
 // 리뷰 조회
 export async function getMemberReview(offet, limit) {
-    const url = 'members/reviews?' + objectToQueryString({offset: 0, limit: 10})
+    const url = 'members/reviews?' + objectToQueryString({offset: 0, limit: 1000})
     const response = await axios.get(
         url, config
     )
