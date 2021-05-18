@@ -44,6 +44,8 @@
 	b. 빌드<br />
 	c. FTP 통해 /kis/kisweb/smartorder/nweb/www 폴더 빌드 된 파일 전송<br />
      (단 전송전 원격지의 precached-manifest 파일과 static 폴더를 삭제후 전송)<br />
+     * 38번 개발계의 경우:  /www 폴더 안에 있는 agent.html, download.html 파일 삭제하면 안됨)
+     
 	d. 배포 완료<br />
 	
 	=> 변경 deploy스크립트 추가
@@ -56,7 +58,5 @@
 	   (운영2) npm run deploy.prd2
 	   
 	   ```
-
-
 
 
